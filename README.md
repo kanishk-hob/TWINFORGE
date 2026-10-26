@@ -1,5 +1,8 @@
 # TWINFORGE
 
+For presentation startup, the isolated degradation rehearsal, and honest fallback
+instructions, see [the presentation runbook](docs/presentation-demo.md).
+
 For the current implementation, setup, verification and remaining work, start
 with [TWINFORGE_CURRENT_STATUS.md](TWINFORGE_CURRENT_STATUS.md).
 

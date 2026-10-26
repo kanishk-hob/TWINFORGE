@@ -156,7 +156,9 @@ Manual browser acceptance checklist (not implied by Python/Node test success):
    the new selection. Observe a source run change using a test fixture (do not
    mutate the shared simulator); historical context must invalidate.
 7. Hide/restore the tab and inspect network requests for serialized polling and
-   GET-only traffic. The dashboard must never call `/sync` or port 8000.
+   GET reads and the two explicit calculation-only POSTs (`/api/scenarios/maintenance/compare`
+   and `/api/recommendations/maintenance`). The dashboard must never call `/sync`
+   or simulator mutation endpoints.
 
 Historical verification of the earlier single-page implementation: 56 Python tests passed, including 10 real PostgreSQL
 tests on the dedicated local database. All 15 Node tests passed, including the

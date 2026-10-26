@@ -1,364 +1,367 @@
-# TWINFORGE current status and teammate handoff
+# TWINFORGE - Current implementation and teammate handoff
 
-Reviewed and checked on **2026-10-25**. This describes the current code, not a
-future blueprint. Start here, then consult the versioned calculation contracts.
-No original full blueprint document was found in this checkout.
+Updated: 2026-10-26. This document replaces the previous status file at the user's request.
+It describes the working tree, including uncommitted changes, rather than only the last commit.
 
-## Purpose and actual architecture
+## 1. Current position
 
-TWINFORGE provides read-only manufacturing digital-twin visibility, durable
-observations, independent operational calculations and observed-condition
-assessments. It currently uses synthetic factory data, not industrial hardware.
-**Factory Simulator is a separate repository and process**, normally on port
-8000. It is not bundled into or deployed by this repository. Each teammate runs
-their own simulator, TWINFORGE and database unless a shared environment is
-explicitly agreed and configured. A GitHub clone does not share running services
-or database contents.
+TWINFORGE is a retrofit-first manufacturing digital-twin and decision-support MVP.
+The application includes live twins, optional PostgreSQL history, independent KPI and
+observed-condition calculations, statistical predictive screening, maintenance timing
+comparisons, recommendations, and a six-view operator dashboard.
+
+The product is implemented but full real-browser acceptance remains pending. Recent
+unit/API checks pass; real PostgreSQL regression tests were skipped in the latest run.
+Live persistence and historical HTTP reads have separately been observed working.
+Do not confuse those limited live checks with a full database regression pass.
+
+- Branch: `chaitanya_main`.
+- HEAD: `e2b6ae4eb330008aaa563d40d0a73ba0e67848c6`.
+- HEAD subject: `feat: add predictive maintenance, what-if simulation, recommendations and decision support`.
+- Important work remains uncommitted; do not reset, clean, stash, switch branches,
+  overwrite changes, or commit/push without the user's instruction.
+- Factory Simulator is a separate repository and process. Never modify it as a
+  shortcut to fixing TWINFORGE.
+
+## 2. Architecture and ownership
 
 ```text
-Separate Factory Simulator :8000
-  GET /api/v1/snapshot
-    -> HTTPX connector -> serialized SyncService -> canonical mapper
-    -> optional PostgreSQL transaction -> in-memory TwinRegistry
-    -> TWINFORGE FastAPI :8001 -> same-origin Operator Dashboard
-
-PostgreSQL observations/events -> bounded retrieval -> pure kpi.v1 / health.v1
-  -> read-only historical/calculation APIs -> dashboard
+Separate Factory Simulator (normally localhost:8000)
+  -> HTTPX snapshot connector
+  -> serialized automatic SyncService
+  -> canonical mapper / MachineTwin
+  -> PostgreSQL transaction when configured
+  -> in-memory TwinRegistry
+  -> FastAPI twin/status/history/calculation APIs (localhost:8001)
+  -> same-origin vanilla-JavaScript operator dashboard
 ```
 
-FastAPI lifespan owns one background synchronization loop and closes its task
-and database pool on shutdown. Polls and manual synchronization share a lock.
-Only increasing per-asset sequences are accepted within a run; a changed run ID
-allows sequence reset. Failed polls retain last-known twins and retry on the
-normal schedule. Errors are summarized; source status checks the latest attempt
-and age of the last successful sync. Successful twin retrieval alone does not
-prove the source is connected.
+Storage commits accepted observations before publication to the registry. Increasing
+sequences are accepted per run; duplicates and older observations do not create
+repeated history. Run changes permit sequence resets. Failed polls retain last-known
+twins. Database failures are reported and retried by subsequent polls; intermediate
+source snapshots can be lost during outages because there is no durable replay queue.
+The registry starts empty after restart and repopulates through synchronization, not
+by loading historical rows.
 
-When configured, PostgreSQL persistence precedes the registry update. Normalized
-factories, lines, assets and runs link to telemetry observations and observed
-state/fault events. Unique source/run/asset/sequence keys prevent duplicate
-history, including after restart. Transactions are bounded and atomic. A failed
-write does not advance the successful synchronization timestamp. There is no
-durable retry queue: the next poll reads the latest snapshot, so outage intervals
-may be lost. The registry starts empty after restart and repopulates from the
-source; it is not hydrated from old database history.
+The frontend uses native JavaScript modules, hash routing, shared URL selection,
+uPlot charts, and esbuild. TypeScript checks selected JavaScript/contracts; this is
+not a React/Next.js application. FastAPI serves static assets at `/dashboard/`.
+There is no separate frontend server required after building.
 
-The frontend is **HTML/CSS/vanilla JavaScript**, not Next.js or React. Typed
-JSDoc/API contracts, uPlot charts and an esbuild bundle extend the existing
-frontend. FastAPI serves built assets; no separate frontend server is required.
-Dashboard traffic is GET-only to TWINFORGE. It never controls or directly calls
-the simulator.
+The dashboard calls TWINFORGE APIs, not simulator control APIs. Decision Support
+uses two calculation-only POST requests; describing all dashboard traffic as GET-only
+would be incorrect. Neither calculation executes maintenance or controls machines.
 
-## Functionality and verification status
+## 3. Implementation inventory
 
-“Implemented” means present in code; it does not imply browser or real-database
-acceptance. The current preview was checked again during this handoff: source
-reported connected, three twins were returned, and **persistence was disabled**.
-Both application and isolated-test database environment variables were unset.
-That is local runtime configuration, not a missing persistence implementation.
+| Feature | Current status / location | Important limitation |
+| --- | --- | --- |
+| Simulator connector and automatic synchronization | Implemented; `app/connectors/`, `app/services/sync_service.py` | Depends on separate source; no recovery of every missed snapshot |
+| Canonical twins and registry | Implemented; `app/twin/` | Registry is process-local; source health scores remain source-provided |
+| Connectivity / freshness | Implemented; `app/main.py`, sync service | Successful browser refresh does not prove source connection; sync age is not transport latency |
+| PostgreSQL persistence | Implemented; `app/storage/` | Optional configuration; latest full suite did not exercise real PostgreSQL tests |
+| Telemetry / machine events | Implemented and live historical reads verified | Snapshot-observed transitions, not exact physical event times |
+| KPI v1 | Independent engine; `app/kpi/`, `docs/kpi-v1.md` | Complete bounded source-time evidence required; several metrics intentionally unavailable |
+| health.v1 | Independent observed-condition rules; `app/health/` | Reports recorded evidence, not prediction or physical machine health |
+| predictive.v1 / v2 | Rolling Z-score; opt-in Z-score/EWMA; `app/predictive/` | Statistical anomaly/drift screening, not failure probability or remaining useful life |
+| Maintenance what-if | Implemented; `app/simulation/` | Frozen current canonical context and caller timing assumptions; no simulator mutation |
+| Recommendation policy | Implemented; `app/recommendation/` | Advisory; inadequate evidence leads to manual review; no automatic execution |
+| Overview | Implemented; `app/static/dashboard/console.js` | Counts known twins, not complete installed inventory |
+| Machines | Implemented; identity, state, telemetry, relationships and history | Missing metadata/telemetry stays unavailable |
+| KPI Analytics | Implemented; backend metric cards, context and reasons | No durable historical KPI trend series |
+| Health Assessment | Implemented; source scores separate from independent evidence | Requires bounded receipt-time evidence for independent rules |
+| History | Implemented; paginated telemetry, events, trends and loaded-data export | Explicit applied asset/run required; initial zero-loaded message can be misleading |
+| Decision Support | Implemented; predictive, comparison and recommendation panels | Comparison/recommendation require current run, unlike historical analytics |
+| Polling hardening | Uncommitted `refresh.js`, console changes and tests | Real-browser flicker/focus/viewport acceptance still pending |
+| Decision action feedback | Latest targeted fix in `decision-view.js` | Browser end-to-end test remains pending; handler fixtures and live APIs tested separately |
+| Presentation runner | `tests/presentation_demo.py`, `docs/presentation-demo.md` | Memory mode is temporary evidence, not PostgreSQL persistence verification |
 
-| Feature | Status | Implementation location | Limitation |
-| --- | --- | --- | --- |
-| Simulator connection, automatic sync, run/sequence validation | Implemented; unit/API checks and live HTTP smoke verified | `app/connectors/simulator.py`, `app/services/sync_service.py`, `app/twin/` | Snapshot sampling can miss intermediate transitions |
-| Connectivity/freshness and retained last-known values | Implemented; regression verified | `app/twin/registry.py`, `app/main.py`, frontend `console.js` | Source status and twin requests are not atomic; global sync freshness is not physical machine liveness |
-| PostgreSQL identity, telemetry, events, deduplication | Implemented; current real-DB verification pending | `app/storage/`, migrations `001` and `002` | Disabled in current preview; 15 SQL integration tests skipped this session |
-| Overview | Implemented; HTTP delivery and transformation tests verified | `app/static/dashboard/console.js` | Counts cover known twins, not installed inventory; visual acceptance pending |
-| Machines | Implemented | `console.js`, `components.js`, `evidence-view.js` | Only supplied metadata/telemetry; unknown sensors/units are not inferred |
-| KPI Analytics | Implemented, backend/unit/API checks verified | `app/kpi/`, `analysis-view.js` | Requires persisted inputs and valid source-time boundaries; no historical KPI trend endpoint |
-| Health Assessment | Implemented, backend/unit/API checks verified | `app/health/`, `analysis-view.js` | Historical condition evidence, not validated prediction or physical machine health |
-| History | Implemented; pagination/gap utilities tested | `app/storage/postgres.py`, `evidence-view.js`, `charts.js` | Time/source filters apply to loaded rows; no server time filter or run catalog |
-| Navigation, URL selection, search, filters, refresh | Implemented; URL/filter utilities tested | `console.js`, `data.js` | Full keyboard/mobile/race acceptance in a real browser is still pending |
-| JSON exports, charts, quality labels | Implemented; data/gap tests verified | `data.js`, `charts.js`, view modules | Export is only loaded/filtered data; chart gaps are not reconstructed |
-| Frontend typing/lint | Partial static coverage; checks passed | `contracts.d.ts`, `frontend/tsconfig.json`, `frontend/check.mjs` | Type checking targets API/data boundary; lint is syntax/safety checking, not a full UI type or accessibility audit |
-| Production deployment/authentication/hardware adapters | Planned, not implemented | None | This is a local development workspace, not a hardened hosted service |
+Navigation, selected-machine/run/source URL context, search/state filters, explicit
+refresh, loaded-history exports, numeric charts with gap handling, and quality/error
+states are implemented. Exports describe loaded records, not all database history.
+Missing values are not zero. Source time, database receipt time and browser refresh
+time have different meanings and must remain separately labelled.
 
-The five views share a navy sidebar, real factory/line context, source and
-persistence status, and URL-preserved asset/run/source selection. Overview has
-search and state/factory/line filters plus a selected-machine inspection panel.
-Machines shows canonical identity, observed state, job, reported fault,
-relationships, telemetry and source scores. KPI and health calculations require
-explicit user actions. History uses 200-row forward pages, initially capped at
-2,000 records per stream, with explicit budget extension and retry deduplication.
-Loaded extents and source/receipt timestamps remain separate. Numeric charts
-break at context/sequence gaps, stale/invalid samples and missing timestamps or
-values; overlapping source time is not silently sorted into a continuous line.
-Errors retain clearly labelled last-known results where supported.
+## 4. Independent results versus source values
 
-### Independent calculations versus source data
+- `MachineTwin.health.health_score` and `anomaly_score` are source-reported values;
+  they are not independently validated TWINFORGE predictions.
+- `kpi.v1` computes quality, reject rate, per-asset good-unit throughput, estimated
+  energy, estimated energy per good unit and sampled downtime when inputs suffice.
+  API availability, performance, OEE and WIP remain unknown without schedules,
+  trustworthy runtime, ideal-cycle and unit-flow evidence. Do not sum upstream and
+  downstream throughput into factory output. Sampled downtime is not verified OEE downtime.
+- `health.v1` uses `observed_condition_rules`: last-observation fault, observed FAULT
+  and OFFLINE states, distinct fault-start/clear events, and evidence discontinuity.
+  Empty/limited evidence yields unavailable/partial assessments, not healthy zeros.
+- Predictive v1 is default rolling Z-score; v2 is opt-in `z_score_ewma`.
+  Existing thresholds must not be tuned merely to manufacture demo alerts.
+- What-if estimates maintenance timing only. Missing production, energy and financial
+  impacts remain unavailable. Remaining batch duration is a caller assumption.
+- Recommendation responses include policy/evidence reasons and approval requirements.
+  No durable approval recording, command execution or certified safety decision exists.
 
-- `kpi.v1` derives quality, reject rate and per-asset good-unit throughput from
-  persisted raw counters. It integrates interval power for estimated energy and
-  energy per good unit, and derives estimated sampled downtime/reasons from
-  observed states. It does not forward the simulator's precomputed factory KPIs.
-- Availability, performance, OEE and WIP are unavailable through the current
-  API when their required inputs are absent. Pure standard OEE formulas have
-  synthetic tests, but this does not establish measured OEE. Never aggregate
-  upstream/downstream throughput as line output or call sampled downtime verified
-  OEE downtime. See `docs/kpi-v1.md` for precise definitions.
-- `health.v1`, method `observed_condition_rules`, independently reports six
-  evidence indicators: `fault_reported_at_last_observation`,
-  `fault_state_observed`, `offline_state_observed`, `fault_start_observations`,
-  `fault_clear_observations`, and `evidence_discontinuity`. It preserves evidence
-  references, reasons, data-quality counts and available/partial/unavailable
-  states. Initial `fault_observed` is not a known onset; duplicate event IDs do
-  not inflate counts. No confidence percentage or prediction is fabricated.
-- `MachineTwin.health.health_score` and `anomaly_score` originate from the
-  simulator. They are displayed separately, not independently validated or used
-  as the health engine's evidence. State, faults, job, telemetry and quality flags
-  are also source-reported observations. See `docs/health-v1.md`.
+## 5. Actual runtime evidence observed on 2026-10-26
 
-## Structure and API reference
+These observations are time-specific, not permanent configuration guarantees:
 
-| Path | Responsibility |
+- Port 8001 responded; source `factory_simulator` reported connected.
+- `/api/persistence-status` was rechecked while updating this document:
+  `enabled: true`, `last_error: null`, `last_persisted_at: 2026-10-26T02:49:57.183176+00:00`.
+  This is last successful batch activity, not proof of a new row or an active DB probe.
+- Current reported run: `afce30d0f04d49dfbb731a42bdadd4ce`.
+- In the preceding diagnosis, current `CNC_01` was IDLE, sequence 0, with no current
+  job, null telemetry and invalid/not-fresh quality (`no telemetry`). Persistence
+  being enabled does not make those readings sufficient for analytics.
+- Historical run `91f340ae5ecf4ceaac7ac9e84cf0032e`, asset `CNC_01`:
+  telemetry GET returned 120 rows and history GET returned 40 events, HTTP 200.
+  Subsequent cursor pages were empty. Measurements included power, current, speed,
+  temperature and vibration. JSON shapes matched the frontend.
+- The supplied loaded-history export instead selected the newer run and contained
+  one observation and one event. It was not an export of the older 120-row run.
+- Live database credentials, exact active database identity and migration tracking
+  were not re-inspected in these latest UI fixes. Earlier context names the local
+  `127.0.0.1:55432/twinforge_test` instance; verify identity before any schema/test work.
+  Do not claim migration 001/002 status was freshly checked here.
+
+### History zero-record diagnosis (not yet changed)
+
+`console.js` applies form fields only when **Open selection** is clicked. The
+History view then waits for **Load recorded history**. `evidence-view.js` refuses
+requests with an empty applied asset/run. Initially its empty arrays still display
+"Loaded 0 telemetry and 0 events", which is not proof of an empty database.
+
+To inspect the known old history: choose CNC_01, factory_simulator and the historical
+run above; click Open selection; leave receipt bounds empty initially; click Load
+recorded history. Use current source run selects a different run and only fills the
+input until Open selection is clicked.
+
+Requests use limit 200 and endpoint-specific exclusive `after_id`; each stream has
+an initial 2,000-row cap, extendable explicitly. Source and receipt bounds are filtered
+client-side. The backend accepts omitted run filters, but this UI requires a selected
+run. Explicit empty `run_id=` is an exact empty-string filter, not all runs.
+
+Recommended remaining UI fix: distinguish not-yet-loaded/missing-selection from a
+successfully loaded empty result. This recommendation has not been implemented.
+
+### Decision buttons: latest fix
+
+Both handlers and API paths were correct. The historical selection was blocked by
+the current-run prerequisite; errors appeared above the panels while the panels
+retained "No result loaded". The fix adds local per-action validation/loading/success/
+error feedback and explicit current-run selection guidance, retaining context guards.
+Eight regression tests were added. Existing approval policy is unchanged.
+
+Live calculation-only POST checks used a clearly assumed 60-second maintenance
+interval, unknown remaining batch duration and no expected-sequence constraint:
+
+- Historical run: both endpoints returned 409, "Requested run does not match current canonical run".
+- Current run: comparison returned 200 with partial timing outcomes; recommendation
+  returned 200, `manual_review_required`, `INSUFFICIENT_DATA`, human approval required
+  and automatic execution false.
+
+To use the buttons: Use current source run -> Open selection -> enter a positive
+maintenance duration -> calculate. A current run with insufficient telemetry should
+still produce honest partial/manual-review outcomes, not fabricated advice.
+
+## 6. Repository and API reference
+
+| Location | Responsibility |
 | --- | --- |
-| `app/main.py`, `app/config.py` | FastAPI routes/lifespan/static mount; environment configuration |
-| `app/connectors/`, `app/services/`, `app/twin/` | Source protocol, synchronization, canonical mapping/registry |
-| `app/storage/` | asyncpg pool, persistence, bounded reads, migration runner/models |
-| `app/storage/migrations/001_initial.sql`, `002_kpi_inputs.sql` | Initial normalized schema; additive nullable counter/power inputs |
-| `app/kpi/`, `app/health/` | Separate pure engines, evidence/response models and storage-facing services |
-| `app/static/dashboard/index.html`, `console.js` | Current five-view entry point and shared shell |
-| `client.js`, `contracts.d.ts`, `data.js` in that directory | Typed API access and data utilities |
-| `analysis-view.js`, `evidence-view.js`, `components.js`, `charts.js`, `styles.css` | Views, safe rendering, charting and styling |
-| `frontend/` | npm lockfile, build/watch/type/syntax tooling, public configuration example |
-| `design/` | Five HTML exports/screenshots/design notes; illustrative reference data, not production fixtures |
-| `tests/`, `tests/dashboard/` | unittest/API/SQL integration and Node tests; legacy browser harness |
-| `docs/` | Calculation contracts and dashboard operational documentation |
+| `app/main.py`, `app/config.py` | FastAPI lifespan/routes and environment settings |
+| `app/connectors/`, `app/services/`, `app/twin/` | Source acquisition, sync, canonical model/registry |
+| `app/storage/postgres.py`, `app/storage/models.py` | Persistence, bounded reads, serialized records |
+| `app/storage/migrations/001_initial.sql`, `002_kpi_inputs.sql` | Versioned schema; nullable KPI raw inputs added in 002 |
+| `app/kpi/`, `app/health/`, `app/predictive/` | Independent calculations and evidence services |
+| `app/simulation/`, `app/recommendation/` | Read-only timing model and advisory policy |
+| `app/static/dashboard/` | Frontend modules, styles and generated build directory |
+| `frontend/` | npm manifest/lockfile, build and checks; not separate application server |
+| `tests/`, `tests/dashboard/` | Python and dependency-free Node tests |
+| `docs/` | Versioned contracts and operator/demo instructions |
 
-Legacy `dashboard.js`, `api.js`, `history.js` and `kpi.js` remain for existing
-tests/harness compatibility; `index.html` now loads `build/console.js`. Do not
-assume tests of legacy renderers cover the new five-view DOM interactions.
-
-All URLs below are relative to `http://127.0.0.1:8001`:
-
-| Endpoint | Purpose / parameters |
+| Method/path | Contract |
 | --- | --- |
-| `GET /health` | Application liveness only, not a source/database health probe |
-| `GET /api/twins` | Current known canonical twins |
-| `GET /api/twins/{asset_id}` | One current twin; unknown ID returns 404 |
-| `GET /api/source-status` | Connection/freshness, run, last attempt/success, safe error and failures |
-| `GET /api/persistence-status` | Enabled flag and process-local last write/error; not a live DB probe |
-| `GET /api/twins/{asset_id}/telemetry` | Persisted observations; `limit` 1–1000 (default 100), exclusive `after_id` (default 0), optional exact `run_id` |
-| `GET /api/twins/{asset_id}/history` | Observed state/fault events; same pagination parameters, independent cursor |
-| `GET /api/twins/{asset_id}/kpis` | Required `run_id`, `start`, `end`; `source` defaults to `factory_simulator` |
-| `GET /api/twins/{asset_id}/health-assessment` | Required `source`, `run_id`, `start`, `end`, `assessment_generated_at` |
-| `POST /sync` | Existing manual synchronization API; not invoked by the dashboard |
-| `/dashboard/` | Built read-only UI; hash routes `#/overview`, `#/machines/{encoded_asset_id}`, `#/kpi`, `#/health`, `#/history` |
-| `/docs`, `/redoc`, `/openapi.json` | Generated API documentation and exact response schemas |
+| `GET /health` | Application liveness, not database health |
+| `GET /api/twins`, `/api/twins/{asset_id}` | Current canonical twins/detail |
+| `GET /api/source-status` | Run, connection, latest sync/attempt, failure/freshness |
+| `GET /api/persistence-status` | Enabled, last successful batch time, safe error |
+| `POST /sync` | Explicit synchronization; not used by dashboard controls |
+| `GET /api/twins/{asset_id}/telemetry` | Observation array; limit 1-1000, after_id >= 0, optional exact run_id |
+| `GET /api/twins/{asset_id}/history` | Event array; independent cursor, same pagination/filter contract |
+| `GET /api/twins/{asset_id}/kpis` | Required run_id/start/end; source defaults factory_simulator; source-time window |
+| `GET /api/twins/{asset_id}/health-assessment` | Required source/run_id/start/end/assessment_generated_at; receipt-time window |
+| `GET /api/twins/{asset_id}/predictive-health` | Required run_id; method rolling_z_score (default) or z_score_ewma |
+| `POST /api/scenarios/maintenance/compare` | Current asset_id/run_id, positive maintenance_duration_seconds; optional remaining_batch_seconds/expected_sequence |
+| `POST /api/recommendations/maintenance` | Same assumptions plus predictive_method; dashboard explicitly requests z_score_ewma |
 
-KPI windows use **source time** with exact recorded start/end boundaries, up to
-24 hours and 10,000 observations. Health windows use half-open **receipt time**
-`[start,end)`, up to 24 hours and 10,000 records per evidence stream; assessment
-time is mandatory, caller-supplied and disclosed in the response. Use aware ISO
-8601 timestamps (`Z` or offset); encode a raw URL's `+` as `%2B`. Oversized or
-invalid queries return 422. Disabled/unavailable storage returns 503. Empty
-history is `[]`; unknown/empty health evidence yields 200 with unavailable
-reasons, not a healthy result. Unexpected health failures return a sanitized 500.
+KPI and health HTTP windows are timezone-aware, positive and at most 24 hours.
+KPI boundaries must match recorded source timestamps; health uses half-open receipt
+bounds [start,end) and a caller-supplied generation timestamp. Health retrieval caps
+each evidence stream at 10,000; KPI caps observations at 10,000. Excess is an explicit
+error, not silent completeness. Read actual schemas at `/docs` or `/openapi.json`.
 
-Source simulation time, UTC receipt time, last successful synchronization time
-and browser refresh time are different clocks/meanings. Never subtract a
-simulated historical timestamp from wall-clock now to claim transport latency.
+Unknown/empty history is HTTP 200 with []; unavailable storage is 503. KPI/health
+empty evidence returns explicit unknown/unavailable results. Invalid requests are
+422. Decision context conflicts are 409; unknown current assets are 404. Recommendation
+can return a safe review result when predictive storage/evidence is unavailable.
 
-## Fresh-clone setup (PowerShell)
+## 7. Fresh-clone setup (PowerShell)
 
-### Prerequisites and reproducibility
+Prerequisites: Python 3.11+ and PostgreSQL 14+ per README; Node/npm for the existing
+lockfile/build. No Node engines constraint is declared; latest build ran on Node
+26.5.1. Each teammate runs their own services/database unless explicitly configuring
+a shared environment. Never assume the author's local data or credentials are included.
 
-- Git; Python **3.11+** and PostgreSQL **14+** are documented by the repository.
-  Current checks used Python **3.11.9**. PostgreSQL was not exercised this session.
-- Node/npm are required for build/tests. Current checks used Node **26.5.1**, npm
-  **11.17.0**. No project `engines` support matrix is declared; older Node versions
-  are not verified. esbuild declares Node >=18; that is not full-app certification.
-- `requirements.txt` contains FastAPI, Uvicorn, HTTPX, Pydantic and
-  `asyncpg>=0.29,<1`; most Python versions are not pinned. The frontend lockfile
-  fixes npm resolution (uPlot 1.6.32, esbuild 0.28.2, TypeScript 7.0.2 currently).
-- Access to the separate Factory Simulator repository is needed for live source
-  data. Its clone URL is not configured here; obtain it from the teammate.
+From the TWINFORGE root:
 
 ```powershell
-git clone https://github.com/Chaitanya7777777/TWINFORGE.git
-cd TWINFORGE
 python -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
-cd frontend
-npm.cmd ci
-npm.cmd run build
-cd ..
+npm.cmd --prefix frontend ci
+npm.cmd --prefix frontend run build
 ```
 
-The bundle is intentionally not committed. Build after cloning before opening
-the dashboard. `npm.cmd run dev` in `frontend` watches/rebuilds assets; it does
-not start an HTTP server. FastAPI continues to serve the generated JS/CSS.
-
-### Environment and optional persistence
-
-`.env.example` and `frontend/.env.example` contain placeholders only. Neither is
-automatically loaded. Set variables in the shell that launches the relevant
-process, or through your own secret manager. Never commit a populated `.env`.
+Backend configuration is read from process environment. `.env.example` and
+`frontend/.env.example` are templates, NOT automatically loaded files.
 
 | Variable | Default / use |
 | --- | --- |
 | `TWINFORGE_SIMULATOR_URL` | `http://127.0.0.1:8000` |
-| `TWINFORGE_SIMULATOR_TIMEOUT_SECONDS` | `2.0` |
-| `TWINFORGE_SYNC_POLL_INTERVAL_SECONDS` | `1.0`, delay between completed polls |
-| `TWINFORGE_SOURCE_STALE_AFTER_SECONDS` | `5.0` |
-| `TWINFORGE_DATABASE_URL` | Unset: in-memory mode; no historical calculations |
-| `TWINFORGE_DATABASE_TIMEOUT_SECONDS` | `5`, bounds complete DB operations |
-| `TWINFORGE_KPI_MAX_GAP_SECONDS` | `5`, source-time gap tolerance, not sequence-gap forgiveness |
-| `TWINFORGE_TEST_DATABASE_URL` | Separate test-only database, exactly named `twinforge_test` |
-| `TWINFORGE_API_BASE` | Empty build-time same-origin prefix; optional `/proxy-prefix`, not a credential-bearing URL |
+| `TWINFORGE_SYNC_POLL_INTERVAL_SECONDS` | 1 second between completed attempts |
+| `TWINFORGE_SIMULATOR_TIMEOUT_SECONDS` | 2 seconds |
+| `TWINFORGE_SOURCE_STALE_AFTER_SECONDS` | 5 seconds |
+| `TWINFORGE_DATABASE_URL` | Unset = no persistence |
+| `TWINFORGE_DATABASE_TIMEOUT_SECONDS` | 5 seconds |
+| `TWINFORGE_KPI_MAX_GAP_SECONDS` | 5 source-time seconds; does not forgive sequence gaps |
+| `TWINFORGE_API_BASE` | Build-time empty same-origin prefix; optional proxy path, never credentials |
+| `TWINFORGE_TEST_DATABASE_URL` | Opt-in isolated test database only |
 
-For persistence, use a **new local development database** and dedicated role.
-With your PostgreSQL administrator, run the following once only if these names
-do not already exist; never reset an existing database to follow this guide:
-
-```sql
-CREATE ROLE twinforge LOGIN;
-\password twinforge
-CREATE DATABASE twinforge OWNER twinforge;
-```
-
-Then in the TWINFORGE shell (replace placeholders and URL-encode credentials):
+Have a PostgreSQL administrator provision a dedicated local database and role if
+needed. Verify its identity before migration; do not reset/recreate an existing DB.
+Use private credentials with special characters URL-encoded:
 
 ```powershell
-$env:TWINFORGE_DATABASE_URL = 'postgresql://YOUR_USER:YOUR_PASSWORD@127.0.0.1:5432/twinforge'
-$env:TWINFORGE_DATABASE_TIMEOUT_SECONDS = '5'
+$env:TWINFORGE_DATABASE_URL = 'postgresql://YOUR_USER:YOUR_PASSWORD@127.0.0.1:YOUR_PORT/YOUR_DATABASE'
+# Only after verifying this is the intended database:
 .\.venv\Scripts\python.exe -m app.storage.migrate
-```
-
-Confirm the target before migrations. `schema_migrations` tracks numbered files
-under an advisory lock and transaction. Apply `001` and `002`; rerunning is safe.
-Startup does not create tables. Migration 002 leaves unavailable historical
-counter/power inputs null, with no invented backfill. A previous dedicated local
-verification instance used port 55432/database `twinforge_test`; that instance
-is not created or shared by cloning this repository.
-
-### Start the two separate services
-
-In the **separate Factory Simulator repository**, its inspected README uses:
-
-```powershell
-python -m venv .venv
-.\.venv\Scripts\python.exe -m pip install -r requirements.txt
-.\.venv\Scripts\python.exe -m uvicorn app.main:app --host 127.0.0.1 --port 8000
-```
-
-Follow that repository's own README for its optional React frontend and commands
-to advance simulation. Its clock advances when commanded; TWINFORGE polling
-does not advance it. Do not copy its files or virtual environment into TWINFORGE.
-
-In the **TWINFORGE repository**, with the chosen environment already set:
-
-```powershell
 .\.venv\Scripts\python.exe -m uvicorn app.main:app --host 127.0.0.1 --port 8001
 ```
 
-Open `http://127.0.0.1:8001/dashboard/` and `/docs`. No database is needed to view
-live twins, but History/KPI/Health reads require configured, migrated PostgreSQL.
-The frontend uses same-origin API requests, not the simulator address. There is
-no authentication layer; keep local development services bound to loopback.
+Migrations are explicitly applied and recorded in `schema_migrations`; application
+startup does not create tables. Do not modify previously applied migrations.
+Without a database URL, live twins still work but stored-history analytics do not.
+Do not commit environment files, credentials, dumps, logs or build/dependency output.
 
-## Verification evidence
-
-The following were rerun for this handoff on 2026-10-25:
-
-| Command (from repository root) | Observed result |
-| --- | --- |
-| `.\.venv\Scripts\python.exe -m unittest discover -s tests -v` | 96 discovered: **81 passed, 15 skipped**; skips say `No isolated PostgreSQL test URL configured` |
-| `npm.cmd --prefix frontend test` | **35 passed**, 0 failed/skipped (new console utilities plus legacy module checks) |
-| `npm.cmd --prefix frontend run typecheck` | Passed; typed API/data boundary only |
-| `npm.cmd --prefix frontend run lint` | Passed; syntax and rendering-safety checks |
-| `npm.cmd --prefix frontend run build` | Passed; production JS/CSS generated locally, excluded from Git |
-| `.\.venv\Scripts\python.exe -m compileall -q app tests` | Passed |
-| `git diff --check` | Passed; Git also reports LF/CRLF normalization warnings |
-
-Read-only HTTP smoke recheck: dashboard HTML/bundle, twins, source status and
-persistence status returned 200; **3 known twins**, source connected, persistence
-disabled. This does not verify persistent-history rendering or SQL behavior.
-No database writes/migrations, simulator mutations or browser actions were
-performed for this handoff. Earlier real PostgreSQL/reference/recovery reports
-are documented in README but were **not rerun here**. They are not evidence that
-the current full suite passed against PostgreSQL.
-
-**Real-browser visual acceptance remains pending.** The earlier Computer Use
-attempt stopped because it could not confidently determine the Windows browser
-URL. No desktop/mobile screenshot or interaction pass is claimed. Node tests
-are not real-browser tests, and some renderer tests target legacy modules.
-
-To run the 15 real SQL tests, create a separate disposable `twinforge_test`
-database owned by a test role with schema-creation privileges, then:
+In a separate terminal and the separate simulator checkout, using its environment
+and setup instructions, the existing runbook uses:
 
 ```powershell
-$env:TWINFORGE_TEST_DATABASE_URL = 'postgresql://TEST_USER:TEST_PASSWORD@127.0.0.1:5432/twinforge_test'
-.\.venv\Scripts\python.exe -m unittest discover -s tests -p test_postgres_integration.py -v
+.\.venv\Scripts\python.exe -m uvicorn app.main:app --host 127.0.0.1 --port 8000
 ```
 
-The fixture verifies the database name, creates generated `tf_test_<uuid>`
-schemas, applies real migrations and removes only its generated schemas. Never
-point it at production. Optional `tests/manual_postgres_recovery.py` stops and
-starts a specifically guarded Docker test container; read its safeguards before
-running. `tests/manual_kpi_reference.py --simulator-repo '..\factory-simulator'`
-uses a separate controlled simulator subprocess and isolated SQL schema. Neither
-manual script was run for this handoff.
+Do not start duplicate services on occupied ports. Open:
+`http://127.0.0.1:8001/dashboard/`; API docs: `http://127.0.0.1:8001/docs`.
+Hash navigation includes overview, machines, kpi, health, history and decision.
+Build after frontend changes; `npm.cmd --prefix frontend run dev` watches builds.
 
-### Short manual acceptance walkthrough
+## 8. Verification evidence and commands
 
-1. At desktop and narrow mobile widths, visit all five routes. Check labels,
-   keyboard focus, sidebar, scrollable tables and no page-wide overflow. Search
-   and filter actual twins, select one, navigate and reload its URL.
-2. In your own simulator, advance a few steps using its documented controls.
-   Verify observed sequences/telemetry update in TWINFORGE without a page reload.
-   Check source timestamps against the simulator and browser refresh separately.
-3. Stop your simulator process. After the next poll, source status should report
-   disconnection; twins should remain labelled last-known. Restart it and verify
-   automatic recovery. Do not interrupt someone else's shared process.
-4. Enable your migrated development database and restart TWINFORGE. Advance new
-   observations, load History using the actual asset/run, inspect both timestamp
-   columns and event records, page forward and export the loaded selection. Use
-   exact recorded source boundaries for KPIs and receipt bounds for Health.
-   Compare values, nulls/reasons and evidence references with API JSON. Restart
-   TWINFORGE and confirm stored history persists without duplicate records.
-5. Reset only your own simulator through its UI. Confirm a new run ID and reset
-   sequences are accepted, prior dashboard analysis/history is invalidated, and
-   explicitly selected old-run history remains queryable. Never join runs into
-   a continuous chart. Switch selections during pending requests to check races.
-6. Check missing/unknown IDs, empty runs, disabled persistence (503), invalid
-   windows (422), request failure, hidden-tab polling and retained last-known
-   data. Observe GET-only dashboard traffic, with no `/sync` or simulator calls.
+The following checks actually ran during the immediately preceding Decision Support
+fix on 2026-10-26. They were not rerun solely to rewrite this document.
 
-## Known limitations and next work
+| Command / check | Observed result |
+| --- | --- |
+| `node --test tests/dashboard/decision.test.mjs` | Final run: 28 passed, 0 failed; includes eight new regression tests |
+| `npm.cmd --prefix frontend test` | 69 passed, 0 failed |
+| `npm.cmd --prefix frontend run typecheck` | Passed |
+| `npm.cmd --prefix frontend run lint` | Passed |
+| `npm.cmd --prefix frontend run build` | Passed after outside-sandbox retry; initial esbuild directory access failure was environmental |
+| `.\.venv\Scripts\python.exe -B -m unittest discover -s tests -v` | 143 discovered: 127 passed, 16 skipped, 0 failed |
+| `git diff --check` | Passed; Git emitted an existing status-document line-ending warning |
+| Live status/history/calculation HTTP checks | Results recorded above; not browser acceptance |
 
-1. **Finish browser acceptance first:** all five views, desktop/mobile, keyboard,
-   refresh errors, selection races/run changes and chart gaps with controlled
-   fixtures. Visual polish was implemented from references, not browser-certified.
-2. **Enable isolated SQL verification:** run all 15 current PostgreSQL tests and
-   a persistence-enabled dashboard walkthrough; current preview is in-memory.
-   Migration state of any teammate database must be checked independently.
-3. **Improve reproducibility:** establish supported Node versions and pin/test
-   Python dependencies; consider broader typing and tests for the new view DOM.
-4. **Resolve actual data gaps before expanding calculations:** schedules,
-   trustworthy runtime, ideal-cycle data and unit-flow records are absent.
-   Availability/performance/OEE/WIP must remain unknown where unsupported.
+Backend test subprocess deliberately omitted application/test DB URLs, preserving
+parent configuration and avoiding database writes. Skips were real PostgreSQL tests
+with no isolated test URL configured. No migration/database reset was run for these
+fixes. Earlier 55/61 frontend counts are superseded by 69; earlier database-verified
+reports are historical evidence, not the latest suite result.
 
-History APIs have no server time filtering, reverse paging, totals or complete
-run/asset catalog. Initial old pages may not reach a desired recent window;
-load more explicitly. Large user-expanded datasets may render slowly. There is
-no historical KPI series API: the analysis view shows telemetry context, not an
-invented KPI trend. Source health scores are not historical independent evidence.
-No retention/replay policy, durable missed-snapshot queue, verified physical fault
-timing or calibrated health thresholds exist. Last persistence activity is not
-a real-time DB health assertion. Design export contents are illustrative only.
+`compileall` was not rerun for the latest frontend-only fix. Full browser console,
+network, viewport, keyboard and end-to-end interaction acceptance remains pending.
+Button behavior was exercised with minimal controlled DOM fixtures; live API calls
+were separate. Server-console logs were not inspected for that diagnosis.
 
-### Planned, not implemented
+For future DB integration verification, first confirm a dedicated `twinforge_test`
+database and safe access. Existing tests create unique `tf_test_<uuid>` schemas,
+apply migrations in those schemas and clean up only their own schemas. Do not run
+those tests against production or assume a database name alone proves safe ownership.
 
-Validated predictive models, remaining-useful-life estimates, what-if
-orchestration, recommendations, resilience/benchmarking, industrial protocol
-adapters, 3D and cloud production deployment are outside this implementation.
-Do not treat observed-condition `health.v1` as completion of predictive ML.
-Review and approve any new scope before adding schema, control actions or models.
+## 9. Presentation and manual acceptance
 
-## Sharing hygiene
+See `docs/presentation-demo.md` for the exact isolated rehearsal and limitations:
 
-Commit source, migration SQL, lockfiles, tests, design references and docs only.
-Exclude `.env` files (except placeholder examples), credentials, database dumps,
-logs, virtual environments, `node_modules`, bytecode and generated frontend build
-output. Each teammate builds assets and configures local secrets after cloning.
-The simulator repository is untouched and must be shared independently.
+```powershell
+.\.venv\Scripts\python.exe -B tests/presentation_demo.py --simulator-repo "../factory simulator" --mode memory --interactive
+```
+
+Use the dynamically printed demo URL, not normal port 8001. This mode uses genuine
+isolated simulator-generated snapshots and a temporary memory evidence adapter;
+it is NOT durable PostgreSQL. Event-history/KPI/health-history endpoints unavailable
+in memory mode return 503. The runner does not mutate the shared simulator and owns
+its temporary processes. PostgreSQL mode requires verified isolated infrastructure.
+
+The runbook records an earlier memory rehearsal: 120 target observations, baseline
+v2 WARNING at step 60, CRITICAL/manual-review at step 90, and first post-injection
+alerts at step 61. Baseline alerts also occurred, so these are not proof of prediction
+accuracy. No later failure established warning lead time. This document update did
+not rerun the demonstration or independently revalidate its artifacts.
+
+Manual checklist before presentation:
+
+1. Load all six views at desktop/mobile widths; inspect console/network, labels,
+   keyboard focus, chart/table overflow and no broken assets.
+2. Verify Overview polling preserves filters, selection, focus and scroll without
+   full-page reload or panel flicker. Browser refresh time differs from last sync.
+3. On a privately controlled source only, check disconnect/reconnect: retain
+   last-known data, expose errors, recover on polls. Never disrupt shared services.
+4. Load the known historical run explicitly; inspect telemetry/events, gap handling,
+   independent pagination and export scope. Use recorded source bounds for KPI,
+   receipt bounds for health.
+5. Apply the current run for Decision Support, enter honest timing assumptions,
+   verify both actions show local feedback and operator-approval requirements.
+6. Test run change only in an isolated rehearsal; old decision context must be
+   invalidated/409, not silently combined with new evidence.
+
+## 10. Remaining priorities and boundaries
+
+1. Complete actual browser acceptance of the updated feedback and polling behavior.
+2. Improve History's not-yet-loaded versus empty-result messaging; no backend fix
+   was indicated by the historical read diagnosis.
+3. Obtain sufficient valid/fresh observations in a safe controlled run. Do not
+   change thresholds, rewrite timestamps or use old-run evidence as current advice.
+4. Reverify database identity/migrations and run isolated PostgreSQL integration
+   tests when explicitly authorized; validate full durable demo separately.
+5. Review accumulated uncommitted changes before any requested commit; do not
+   equate passing unit tests with complete presentation acceptance.
+
+Planned, not implemented in this checkout's verified scope: physical industrial
+connectors beyond simulator REST, validated failure prediction/RUL, ML models,
+durable maintenance approval/audit execution, machine actuation, production
+scheduling/unit-flow data for complete OEE/WIP, durable historical KPI/predictive
+trend series, authentication/role management, and cloud deployment. These are not
+claims of production capability or commitments for the next change.
+
+## 11. Working-tree handoff
+
+At this update the existing modified files were README.md, this status document,
+console.js, decision-view.js, docs/operator-dashboard.md and
+ tests/dashboard/decision.test.mjs (dashboard paths under app/static/dashboard).
+Existing untracked additions were refresh.js, docs/presentation-demo.md,
+tests/dashboard/refresh.test.mjs, tests/presentation_demo.py and
+tests/test_presentation_demo.py. Generated bundles are not source handoff artifacts.
+
+This status-document replacement is the only intended edit in this update. No
+Factory Simulator file, database record, runtime setting, branch or commit was
+changed. Future sessions should inspect Git status and actual code before work;
+this dated handoff is guidance, not a substitute for verification.

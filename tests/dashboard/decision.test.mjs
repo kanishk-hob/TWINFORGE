@@ -44,3 +44,35 @@ test('input edits and destroy suppress late requests',async()=>{const host=new T
 test('canonical sequence changes mark old results and suppress requests in flight',async()=>{const host=new TestNode(),live=context();const view=decisionView(host,route,()=>live,{predictive:async()=>predictive()});await btn(host,'Calculate predictive condition').click();live.twin.sequence=5;view.update();assert.match(host.textContent,/observed context changed/);assert.match(host.textContent,/Calculated deviation/);view.destroy();});
 
 test('receipt-age expiry marks retained recommendation outdated without a sequence change',async()=>{const host=new TestNode(),live=context();const data=recommendation();const view=decisionView(host,route,()=>live,{recommendMaintenance:async()=>data});inputs(host)[0].value='10';await btn(host,'Generate maintenance recommendation').click();data.policy_parameters.max_predictive_receipt_age_seconds=60;view.update();assert.match(host.textContent,/exceeded the policy receipt-age limit/);view.destroy();});
+
+for(const [label,method] of [['Compare maintenance timings','compareMaintenance'],['Generate maintenance recommendation','recommendMaintenance']]) {
+  const section=host=>nodes(host).find(n=>n.tagName==='section'&&nodes(n).includes(btn(host,label)));
+  test(label+' explains historical run locally without sending a request',async()=>{
+    const host=new TestNode();let calls=0;
+    const view=decisionView(host,{...route,run:'OLD'},context,{[method]:async()=>{calls++;}});
+    inputs(host)[0].value='60';await btn(host,label).click();
+    assert.equal(calls,0);assert.match(section(host).textContent,/Selected run OLD is historical; current source run is R/);
+    assert.match(section(host).textContent,/Open selection/);assert.doesNotMatch(section(host).textContent,/No result loaded/);view.destroy();
+  });
+  test(label+' reports required duration beside the action',async()=>{
+    const host=new TestNode();let calls=0;
+    const view=decisionView(host,route,context,{[method]:async()=>{calls++;}});
+    await btn(host,label).click();assert.equal(calls,0);
+    assert.match(section(host).textContent,/Maintenance duration is required/);view.destroy();
+  });
+  test(label+' shows loading and server failure locally and permits retry',async()=>{
+    const host=new TestNode();let reject;
+    const view=decisionView(host,route,context,{[method]:()=>new Promise((_,r)=>{reject=r;})});
+    inputs(host)[0].value='60';const pending=btn(host,label).click();
+    assert.match(section(host).textContent,/Reading evidence and calculating/);assert.equal(btn(host,label).disabled,true);
+    reject(new ApiError(503,'unavailable'));await pending;
+    assert.match(section(host).textContent,/Persistence or historical evidence is unavailable/);
+    assert.doesNotMatch(section(host).textContent,/No result loaded/);assert.equal(btn(host,label).disabled,false);view.destroy();
+  });
+  test(label+' renders a successful calculation and local completion feedback',async()=>{
+    const host=new TestNode();const view=decisionView(host,route,context,{[method]:async()=>method==='compareMaintenance'?comparison():recommendation()});
+    inputs(host)[0].value='60';await btn(host,label).click();
+    assert.match(section(host).textContent,method==='compareMaintenance'?/Calculation loaded/:/No action was executed/);
+    assert.match(section(host).textContent,method==='compareMaintenance'?/No overall preference/:/Operator approval required/);view.destroy();
+  });
+}

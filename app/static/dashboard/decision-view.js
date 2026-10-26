@@ -61,17 +61,23 @@ export function decisionView(host,route,getContext,client=api){
   function assumptionsChanged(){stop();previous(['comparison','recommendation'],'assumptions changed.');status.replaceChildren(notice('Assumptions changed. Recalculate the comparison and recommendation.'));}
   for(const f of [duration,remaining,sequence])f.input.addEventListener('input',assumptionsChanged);
   function display(key,data,renderer){sections[key].result=data;sections[key].body.replaceChildren(renderer(data));sections[key].message.replaceChildren(notice(`Browser received this calculation: ${new Date().toISOString()}. Recalculate after context or assumption changes.`));}
+  function feedback(kind,text,tone=''){
+    status.replaceChildren(notice(text,tone));
+    sections[kind].message.replaceChildren(notice(text,tone));
+    if(sections[kind].result===null)sections[kind].body.replaceChildren();
+  }
   async function calculate(kind){
     stop();const live=getContext();
-    if(!route.asset||!route.run||route.source!=='factory_simulator'){status.replaceChildren(notice('Select a machine, run and factory_simulator source. These decision APIs support that source only.','error'));return;}
+    if(!route.asset||!route.run||route.source!=='factory_simulator'){feedback(kind,'Select a machine, run and factory_simulator source, then click Open selection. These decision APIs support that source only.','error');return;}
     let body;
     if(kind!=='predictive'){
-      if(!live.twin||live.source?.run_id!==route.run||live.errors?.twins||live.errors?.source){status.replaceChildren(notice('Refresh observed state and select the current source run before comparing or recommending.','error'));return;}
-      try{body=maintenanceInputs(route,duration.input.value,remaining.input.value,sequence.input.value);}catch(error){status.replaceChildren(notice(error.message,'error'));return;}
+      if(!live.twin||live.errors?.twins||live.errors?.source||!live.source?.run_id){feedback(kind,'Current machine/source context is unavailable. Refresh observed state before comparing or recommending.','error');return;}
+      if(live.source.run_id!==route.run){feedback(kind,`Selected run ${route.run} is historical; current source run is ${live.source.run_id}. These actions require current context. Click Use current source run, then Open selection. Historical predictive evidence alone cannot be used for a current maintenance decision.`,'error');return;}
+      try{body=maintenanceInputs(route,duration.input.value,remaining.input.value,sequence.input.value);}catch(error){feedback(kind,error.message,'error');return;}
     }
     const request=new AbortController();controller=request;busy(true);
     previous(kind==='recommendation'?Object.keys(sections):[kind,'recommendation'],'refresh in progress.');
-    status.replaceChildren(notice('Reading evidence and calculating…'));
+    feedback(kind,'Reading evidence and calculating...');
     try{
       const result=kind==='predictive'?await client.predictive(route,request.signal):kind==='comparison'?await client.compareMaintenance(body,request.signal):await client.recommendMaintenance(body,request.signal);
       if(dead||controller!==request)return;
@@ -80,8 +86,8 @@ export function decisionView(host,route,getContext,client=api){
         display('comparison',result.estimated_scenario_evidence,renderComparison);
         display('recommendation',result,renderRecommendation);
       }else display(kind,result,kind==='predictive'?renderPredictive:renderComparison);
-      status.replaceChildren(notice(kind==='recommendation'?'Recommendation and its exact predictive/scenario evidence loaded together. No action was executed.':'Calculation loaded. Recommendation must be generated separately and may use newer evidence.'));
-    }catch(error){if(!dead&&controller===request){previous(error.status===409?Object.keys(sections):[kind],'request failed; last-known evidence retained.');status.replaceChildren(notice(decisionError(error),'error'));}}
+      feedback(kind,kind==='recommendation'?'Recommendation and its exact predictive/scenario evidence loaded together. No action was executed.':'Calculation loaded. Recommendation must be generated separately and may use newer evidence.');
+    }catch(error){if(!dead&&controller===request){previous(error.status===409?Object.keys(sections):[kind],'request failed; last-known evidence retained.');feedback(kind,`${decisionError(error)}${sections[kind].result!==null?' Previous result: last-known evidence retained; not current advice.':''}`,'error');}}
     finally{if(controller===request){controller=null;busy(false);}}
   }
   function update(){
