@@ -1,0 +1,8 @@
+"""Deterministic predictive screening configuration (risks are not probabilities)."""
+BASELINE_SIZE = 30
+MIN_OBSERVATIONS = 10
+EWMA_ALPHA = 0.2
+EWMA_MONITOR_SIZE = 30
+EWMA_MIN_MONITOR_OBSERVATIONS = 10
+WARNING_THRESHOLD = 0.45
+CRITICAL_THRESHOLD = 0.75

@@ -3,3 +3,12 @@ __pycache__/
 .venv/
 venv/
 .env
+.env.*
+!.env.example
+frontend/node_modules/
+app/static/dashboard/build/
+node_modules/
+*.log
+*.dump
+*.backup
+*.sql.gz

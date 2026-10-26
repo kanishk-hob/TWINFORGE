@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"on-surface-variant":"#3f4850","on-primary":"#ffffff","primary":"#006194","on-error-container":"#93000a","secondary-fixed":"#dfe2ed","tertiary-fixed":"#7ffc97","surface-container-high":"#dce9ff","surface":"#f8f9ff","on-background":"#0b1c30","primary-fixed-dim":"#93ccff","error-container":"#ffdad6","background":"#f8f9ff","on-tertiary":"#ffffff","tertiary":"#006b2c","inverse-primary":"#93ccff","inverse-on-surface":"#eaf1ff","on-secondary":"#ffffff","secondary":"#5b5e68","outline":"#707881","surface-bright":"#f8f9ff","on-primary-fixed-variant":"#004b73","on-secondary-fixed-variant":"#434750","tertiary-fixed-dim":"#62df7d","surface-container-low":"#eff4ff","on-error":"#ffffff","error":"#ba1a1a","primary-container":"#007bb9","on-tertiary-fixed":"#002109","surface-dim":"#cbdbf5","surface-container-lowest":"#ffffff","primary-fixed":"#cce5ff","on-tertiary-container":"#f7fff2","surface-container-highest":"#d3e4fe","on-primary-container":"#fdfcff","on-surface":"#0b1c30","on-secondary-fixed":"#181c24","secondary-container":"#dcdfeb","surface-tint":"#006398","on-primary-fixed":"#001d31","on-tertiary-fixed-variant":"#005320","outline-variant":"#bfc7d2","surface-container":"#e5eeff","tertiary-container":"#00873a","surface-variant":"#d3e4fe","secondary-fixed-dim":"#c3c6d1","inverse-surface":"#213145","on-secondary-container":"#5f626c"},borderRadius:{DEFAULT:"0.125rem",lg:"0.25rem",xl:"0.5rem",full:"0.75rem"},spacing:{"space-xs":"0.25rem",gutter:"0.75rem","space-md":"0.5rem","space-xl":"1rem","space-sm":"0.375rem","gutter-compact":"0.5rem","space-lg":"0.75rem","margin-dock":"0.5rem",margin:"1rem"},fontFamily:{"data-md":["JetBrains Mono"],"data-sm":["JetBrains Mono"],"label-compact":["IBM Plex Sans"],"headline-sm":["IBM Plex Sans"],"headline-lg":["IBM Plex Sans"],"label-caps":["JetBrains Mono"],"body-md":["IBM Plex Sans"],"body-sm":["IBM Plex Sans"],"data-lg":["JetBrains Mono"],"headline-xl":["IBM Plex Sans"]},fontSize:{"data-md":["13px",{lineHeight:"16px",letterSpacing:"-0.01em",fontWeight:"500"}],"data-sm":["11px",{lineHeight:"14px",fontWeight:"400"}],"label-compact":["11px",{lineHeight:"14px",fontWeight:"500"}],"headline-sm":["14px",{lineHeight:"20px",letterSpacing:"-0.01em",fontWeight:"600"}],"headline-lg":["18px",{lineHeight:"24px",letterSpacing:"-0.015em",fontWeight:"600"}],"label-caps":["10px",{lineHeight:"12px",letterSpacing:"0.06em",fontWeight:"600"}],"body-md":["13px",{lineHeight:"18px",fontWeight:"400"}],"body-sm":["12px",{lineHeight:"16px",fontWeight:"400"}],"data-lg":["18px",{lineHeight:"22px",letterSpacing:"-0.02em",fontWeight:"600"}],"headline-xl":["24px",{lineHeight:"32px",letterSpacing:"-0.02em",fontWeight:"600"}]}}}};</script></head><body class="bg-surface font-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 h-full w-64 bg-on-secondary-fixed text-inverse-on-surface z-50 flex flex-col justify-between shadow-[0_1px_8px_rgba(0,0,0,0.12)]"><div class="flex flex-col"><div class="h-14 px-gutter flex items-center justify-between bg-inverse-surface"><div class="flex items-center gap-space-sm"><img alt="TWINFORGE Brand Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UfFUrRHIjKRM4G6qmK9YKW7aCXzO7dhGTyhGHragFsmNn70djeDUhuvEVZkUIlsd6UDO2AAGDy38xj0Q4K4HAMe1MMuU6GZL5WFoFcCXhJLxlEfCCh7-8IEpPTLLGErpfwuW4TPCVVOmSxLumIbtxU0anKmU2x1ewTwMJJgqY8nozYxXhnQNBJu5XLHjOtPGBSBREUl58vxBwIIGE_lq00NVQKaIpSBlm1O0wkewqunw"/><span class="font-headline-sm text-headline-sm tracking-tight text-surface-container-lowest">TWINFORGE</span></div><span class="font-label-caps text-label-caps px-space-xs py-0.5 rounded bg-surface-variant text-on-surface font-semibold">v2.4.0-SIM</span></div><div class="px-gutter pt-space-lg pb-space-xs"><span class="font-label-caps text-label-caps uppercase text-outline-variant tracking-wider">Operational Modules</span></div><nav class="flex flex-col gap-space-xs px-space-sm" data-active-classes="bg-primary text-on-primary font-headline-sm"><a class="flex items-center px-space-md py-space-sm rounded text-inverse-on-surface hover:bg-inverse-surface hover:text-surface-container-lowest transition-colors font-body-sm text-body-sm" data-path="overview" href="#overview"><span>Overview</span></a><a class="flex items-center px-space-md py-space-sm rounded text-inverse-on-surface hover:bg-inverse-surface hover:text-surface-container-lowest transition-colors font-body-sm text-body-sm" data-path="machines" href="#machines"><span>Machines</span></a><a class="flex items-center px-space-md py-space-sm rounded text-inverse-on-surface hover:bg-inverse-surface hover:text-surface-container-lowest transition-colors font-body-sm text-body-sm" data-path="kpi-analytics" href="#kpi-analytics"><span>KPI Analytics</span></a><a aria-current="page" class="flex items-center px-space-md py-space-sm rounded transition-colors bg-primary text-on-primary font-headline-sm" data-path="health-assessment" href="#health-assessment"><span>Health Assessment</span></a><a class="flex items-center px-space-md py-space-sm rounded text-inverse-on-surface hover:bg-inverse-surface hover:text-surface-container-lowest transition-colors font-body-sm text-body-sm" data-path="history" href="#history"><span>History</span></a></nav></div><div class="p-gutter flex flex-col gap-space-md bg-inverse-surface"><div class="flex flex-col gap-space-xs"><span class="font-label-caps text-label-caps uppercase text-outline-variant">Telemetry Gateway</span><div class="flex items-center justify-between"><span class="font-data-sm text-data-sm text-surface-container-lowest truncate">api-gateway:8443/v1</span><div class="flex items-center gap-space-xs"><span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary-fixed opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-tertiary-container"></span></span><span class="font-label-caps text-label-caps text-tertiary-fixed font-semibold">ONLINE</span><span class="font-label-caps text-label-caps text-tertiary-fixed">14ms</span></div></div></div><div class="flex flex-col gap-space-xs"><span class="font-label-caps text-label-caps uppercase text-outline-variant">Persistence Layer</span><div class="flex items-center justify-between"><span class="font-data-sm text-data-sm text-surface-container-lowest">TimescaleDB</span><span class="font-label-caps text-label-caps text-tertiary-fixed-dim bg-on-tertiary-fixed-variant px-space-xs py-0.5 rounded font-semibold">SYNCED</span></div></div><div class="pt-space-xs flex items-center justify-between border-t border-secondary/30"><div class="flex flex-col"><span class="font-data-sm text-data-sm font-semibold text-surface-container-lowest">eng_j_vance</span><span class="font-label-compact text-label-compact text-outline-variant">L3 Systems Engineer</span></div><span class="material-symbols-outlined text-outline-variant text-[20px]">verified_user</span></div></div></aside><div class="pl-64"><header class="fixed top-0 left-64 right-0 h-14 bg-surface/90 backdrop-blur-md z-40 shadow-[0_1px_8px_rgba(0,0,0,0.04)] px-gutter flex items-center justify-between"><div class="flex items-center gap-space-md"><img alt="TWINFORGE Brand Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UfFUrRHIjKRM4G6qmK9YKW7aCXzO7dhGTyhGHragFsmNn70djeDUhuvEVZkUIlsd6UDO2AAGDy38xj0Q4K4HAMe1MMuU6GZL5WFoFcCXhJLxlEfCCh7-8IEpPTLLGErpfwuW4TPCVVOmSxLumIbtxU0anKmU2x1ewTwMJJgqY8nozYxXhnQNBJu5XLHjOtPGBSBREUl58vxBwIIGE_lq00NVQKaIpSBlm1O0wkewqunw"/><div class="flex items-center gap-space-sm font-label-compact text-label-compact"><span class="font-label-caps text-label-caps px-space-xs py-0.5 rounded bg-surface-container-high text-primary font-semibold">TELEMETRY CORE</span><span class="text-outline-variant">/</span><span class="font-data-sm text-data-sm text-on-surface font-semibold">STUTTGART_PLANT_04 / LINE_C</span><span class="text-outline-variant">/</span><span class="font-data-sm text-data-sm text-primary font-semibold bg-surface-container-high px-space-xs py-0.5 rounded">CNC-MILL-04</span></div></div><div class="flex items-center gap-gutter"><div class="flex items-center gap-space-xs px-space-sm py-1 rounded bg-tertiary-fixed/20 text-tertiary font-data-sm text-data-sm"><span class="inline-block h-2 w-2 rounded-full bg-tertiary"></span><span class="font-semibold">api-gateway:8443/v1 ONLINE</span><span class="text-outline-variant">|</span><span>TimescaleDB SYNCED</span></div><div class="hidden xl:flex items-center gap-space-xs font-data-sm text-data-sm text-on-surface-variant"><span class="material-symbols-outlined text-[16px]">schedule</span><span>SYNC: 2025-05-18 14:32:08 UTC</span></div><div class="flex items-center gap-space-xs"><button class="h-8 px-space-md bg-surface-container-lowest text-on-surface hover:bg-surface-container-high transition-colors rounded font-label-compact text-label-compact flex items-center gap-space-xs shadow-[0_1px_2px_rgba(0,0,0,0.05)]" type="button"><span class="material-symbols-outlined text-[16px]">filter_list</span><span>Filter</span></button><button class="h-8 px-space-md bg-primary text-on-primary hover:bg-primary-container transition-colors rounded font-label-compact text-label-compact flex items-center gap-space-xs" type="button"><span class="material-symbols-outlined text-[16px]">sync</span><span>Synchronize</span></button></div><div class="flex items-center gap-space-xs pl-space-xs border-l border-outline-variant/30"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="hidden md:flex flex-col text-left"><span class="font-data-sm text-data-sm font-semibold text-on-surface leading-none">eng_j_vance</span><span class="font-label-caps text-label-caps text-outline-variant">OPERATOR</span></div></div></div></header><main class="relative pt-14 w-full px-gutter bg-surface min-h-screen"><div class="flex flex-col w-full">
+<div class="flex flex-col gap-space-lg pb-12">
+<!-- Top Contract & Evaluation Audit Header -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm p-gutter flex flex-col xl:flex-row xl:items-center justify-between gap-gutter">
+<div class="flex flex-col sm:flex-row sm:items-center gap-gutter">
+<div class="flex items-center gap-space-sm bg-surface-container-high px-space-md py-space-xs rounded">
+<span class="material-symbols-outlined text-primary text-[20px]">fact_check</span>
+<span class="font-data-md text-data-md text-on-surface font-semibold tracking-tight">CONTRACT: health.v1</span>
+</div>
+<div class="flex flex-wrap items-center gap-space-xs font-label-compact text-label-compact">
+<span class="bg-surface-container text-on-surface-variant px-space-sm py-0.5 rounded font-data-sm text-data-sm">METHOD: observed_condition_rules</span>
+<span class="bg-secondary-container text-on-secondary-container px-space-sm py-0.5 rounded font-label-caps text-label-caps">NON-PREDICTIVE / DETERMINISTIC</span>
+<div class="flex items-center gap-space-xs bg-error-container text-on-error-container px-space-sm py-0.5 rounded font-data-sm text-data-sm font-semibold">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-error opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-error"></span>
+</span>
+<span>EVAL_STATE: PARTIAL / AVAILABLE_WITH_GAPS</span>
+</div>
+</div>
+</div>
+<!-- Action Row: Snapshot selector & Contract re-run -->
+<div class="flex flex-wrap items-center gap-space-sm">
+<div class="flex items-center bg-surface-container rounded px-space-sm py-0.5">
+<span class="material-symbols-outlined text-on-surface-variant text-[16px] mr-1">history</span>
+<label class="sr-only" for="snapshot-select">Evaluation Snapshot</label>
+<select class="bg-transparent font-data-sm text-data-sm text-on-surface focus:outline-none cursor-pointer py-1" id="snapshot-select">
+<option value="current">2025-05-18 14:32:08 UTC (Current Ingestion)</option>
+<option value="snap_8841_A">2025-05-18 14:28:40 UTC (Pre-Trip Baseline)</option>
+<option value="snap_8840_Z">2025-05-18 13:45:00 UTC (Tool Change 03)</option>
+<option value="snap_8839_K">2025-05-18 12:00:00 UTC (Job Shift Handover)</option>
+</select>
+</div>
+<button class="h-8 px-space-md bg-primary text-on-primary hover:bg-primary-container transition-colors rounded font-label-compact text-label-compact flex items-center gap-space-xs shadow-sm" id="rerun-contract-btn" type="button">
+<span class="material-symbols-outlined text-[16px]">sync_saved_locally</span>
+<span>Re-run Assessment Contract</span>
+</button>
+</div>
+</div>
+<!-- Telemetry Ingestion Context Bar -->
+<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-gutter font-data-sm text-data-sm bg-surface-container-low p-gutter rounded-xl">
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps uppercase text-on-surface-variant">Target Asset</span>
+<span class="font-semibold text-on-surface">CNC-MILL-04 [5-Axis Heavy]</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps uppercase text-on-surface-variant">Host Node / RT-FW</span>
+<span class="font-semibold text-on-surface">sim_node_082 / v4.18.2-rt</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps uppercase text-on-surface-variant">Active Job Context</span>
+<span class="font-semibold text-primary">JOB-2025-0518-88A</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps uppercase text-on-surface-variant">Ingestion Batch</span>
+<span class="font-semibold text-on-surface">#8841-B (Lat: 18ms)</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps uppercase text-on-surface-variant">Assessment Scope</span>
+<span class="font-semibold text-on-surface">12:00:00Z → 14:32:08Z</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps uppercase text-on-surface-variant">Evaluation Model</span>
+<span class="font-semibold text-tertiary">Deterministic Rules (0% ML)</span>
+</div>
+</div>
+<!-- Data-Quality & Discontinuity Critical Notification -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm p-gutter flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-error text-[20px]">minor_crash</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Evidence Discontinuities &amp; Ingestion Gaps</h2>
+</div>
+<span class="font-label-caps text-label-caps bg-error-container text-on-error-container px-space-sm py-0.5 rounded font-semibold uppercase">
+          Degraded Evidence Layer
+        </span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<!-- Discontinuity Item 1 -->
+<div class="bg-surface-container-low rounded-lg p-space-md flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-error text-[16px]">signal_disconnected</span>
+<span class="font-data-sm text-data-sm font-semibold text-error">GAP #01: Bus Telemetry Blackout (42s)</span>
+</div>
+<span class="font-label-caps text-label-caps text-on-surface-variant">14:28:44Z → 14:29:26Z</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface">
+            Coincident with safety circuit trip. Root cause analysis: bus power drop on secondary gateway I/O slice during emergency line de-energization.
+          </p>
+<div class="flex items-center gap-space-xs font-label-compact text-label-compact text-on-surface-variant mt-1">
+<span class="font-semibold text-on-surface">Rule Impact:</span>
+<span>Rules requiring continuous baseline FFT downgraded to</span>
+<span class="font-data-sm text-data-sm bg-surface-container-highest px-space-xs py-0.5 rounded text-error font-medium">INCONCLUSIVE_DATA_DEFICIT</span>
+</div>
+</div>
+<!-- Discontinuity Item 2 -->
+<div class="bg-surface-container-low rounded-lg p-space-md flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary text-[16px]">sensors_off</span>
+<span class="font-data-sm text-data-sm font-semibold text-on-surface">GAP #02: Transducer Unpolled</span>
+</div>
+<span class="font-label-caps text-label-caps bg-secondary-container text-on-secondary-container px-space-xs py-0.5 rounded">UNRESPONSIVE</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface">
+            Channel <code class="font-data-sm text-data-sm bg-surface-container px-1 py-0.5 rounded text-primary">ifm_vsa001_node04</code> (Auxiliary spindle bearing accelerometer VIB-04) dropped heartbeat at 14:12:00Z.
+          </p>
+<div class="flex items-center gap-space-xs font-label-compact text-label-compact text-on-surface-variant mt-1">
+<span class="font-semibold text-on-surface">State:</span>
+<span>No telemetry packets received for 1,208 seconds. Fallback to single-axis primary vibration sensor.</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Observed Condition Rules Matrix -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm flex flex-col overflow-hidden">
+<div class="p-gutter flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm bg-surface-container-low">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[20px]">rule_folder</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Observed Condition Rules Matrix</h2>
+<span class="font-data-sm text-data-sm text-on-surface-variant">(5 Total Rules Applied)</span>
+</div>
+<div class="flex items-center gap-space-md font-label-compact text-label-compact">
+<span class="flex items-center gap-1"><span class="h-2 w-2 rounded-full bg-error"></span> 2 Violated</span>
+<span class="flex items-center gap-1"><span class="h-2 w-2 rounded-full bg-secondary"></span> 1 Inconclusive</span>
+<span class="flex items-center gap-1"><span class="h-2 w-2 rounded-full bg-tertiary"></span> 2 Compliant</span>
+</div>
+</div>
+<!-- Matrix Table -->
+<div class="overflow-x-auto">
+<table class="w-full text-left font-body-sm text-body-sm">
+<thead class="bg-surface-container font-label-caps text-label-caps text-on-surface-variant uppercase">
+<tr>
+<th class="py-2.5 px-gutter" scope="col">Rule Identifier / Label</th>
+<th class="py-2.5 px-space-md" scope="col">Category</th>
+<th class="py-2.5 px-space-md" scope="col">Condition Status</th>
+<th class="py-2.5 px-space-md" scope="col">Deterministic Trigger Condition</th>
+<th class="py-2.5 px-space-md" scope="col">Observed Metric / Receipt</th>
+<th class="py-2.5 px-gutter text-right" scope="col">Required Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-high font-body-sm">
+<!-- Rule 1: VIOLATED -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-space-md px-gutter">
+<div class="flex flex-col">
+<span class="font-data-md text-data-md font-semibold text-error">RULE-OC-0101</span>
+<span class="font-label-compact text-label-compact text-on-surface">THERMAL_RATE_OF_RISE_CRITICAL</span>
+</div>
+</td>
+<td class="py-space-md px-space-md font-data-sm text-data-sm text-on-surface-variant">SPINDLE_THERMAL</td>
+<td class="py-space-md px-space-md">
+<span class="font-label-caps text-label-caps inline-flex items-center gap-1 bg-error-container text-on-error-container px-space-sm py-0.5 rounded font-semibold">
+<span class="h-1.5 w-1.5 rounded-full bg-error"></span>
+                  VIOLATED / ACTIVE
+                </span>
+</td>
+<td class="py-space-md px-space-md font-data-sm text-data-sm text-on-surface">
+                Spindle bearing temp slope &gt; +5.0°C/min for &gt;90s
+              </td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-col font-data-sm text-data-sm">
+<span class="font-semibold text-error">+8.4°C/min (Peak 74.2°C @ 14:27:10Z)</span>
+<span class="text-on-surface-variant font-label-caps text-label-caps">REF: TELEM_REC_8841_9921</span>
+</div>
+</td>
+<td class="py-space-md px-gutter text-right">
+<button class="h-7 px-space-sm bg-error text-on-error hover:opacity-90 rounded font-label-compact text-label-compact inline-flex items-center gap-1" onclick="inspectEvidence('RULE-OC-0101', 'TELEM_REC_8841_9921')" type="button">
+<span class="material-symbols-outlined text-[14px]">troubleshoot</span>
+<span>Inspect Thermal Log</span>
+</button>
+</td>
+</tr>
+<!-- Rule 2: VIOLATED -->
+<tr class="hover:bg-surface-container-low transition-colors bg-surface-container-lowest">
+<td class="py-space-md px-gutter">
+<div class="flex flex-col">
+<span class="font-data-md text-data-md font-semibold text-error">RULE-OC-0104</span>
+<span class="font-label-compact text-label-compact text-on-surface">HARDWIRED_SAFETY_INTERLOCK_OPEN</span>
+</div>
+</td>
+<td class="py-space-md px-space-md font-data-sm text-data-sm text-on-surface-variant">SAFETY_LOOP</td>
+<td class="py-space-md px-space-md">
+<span class="font-label-caps text-label-caps inline-flex items-center gap-1 bg-error-container text-on-error-container px-space-sm py-0.5 rounded font-semibold">
+<span class="h-1.5 w-1.5 rounded-full bg-error"></span>
+                  VIOLATED / ACTIVE
+                </span>
+</td>
+<td class="py-space-md px-space-md font-data-sm text-data-sm text-on-surface">
+                E-Stop loop circuit voltage drops to 0.0V DC
+              </td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-col font-data-sm text-data-sm">
+<span class="font-semibold text-error">Trip Code: 0x4E1A (Loop 2B Curtain)</span>
+<span class="text-on-surface-variant font-label-caps text-label-caps">REF: EVENT_LOG_8841_0041</span>
+</div>
+</td>
+<td class="py-space-md px-gutter text-right">
+<button class="h-7 px-space-sm bg-surface-container-high text-primary hover:bg-surface-container rounded font-label-compact text-label-compact inline-flex items-center gap-1" onclick="inspectEvidence('RULE-OC-0104', 'EVENT_LOG_8841_0041')" type="button">
+<span class="material-symbols-outlined text-[14px]">lock_reset</span>
+<span>Safety Loop Reset</span>
+</button>
+</td>
+</tr>
+<!-- Rule 3: INCONCLUSIVE -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-space-md px-gutter">
+<div class="flex flex-col">
+<span class="font-data-md text-data-md font-semibold text-secondary">RULE-OC-0202</span>
+<span class="font-label-compact text-label-compact text-on-surface">SPINDLE_RUNOUT_VIBRATION_NOMINAL</span>
+</div>
+</td>
+<td class="py-space-md px-space-md font-data-sm text-data-sm text-on-surface-variant">DYNAMICS_VIB</td>
+<td class="py-space-md px-space-md">
+<span class="font-label-caps text-label-caps inline-flex items-center gap-1 bg-secondary-container text-on-secondary-container px-space-sm py-0.5 rounded font-semibold">
+<span class="h-1.5 w-1.5 rounded-full bg-secondary"></span>
+                  INCONCLUSIVE_DATA_DEFICIT
+                </span>
+</td>
+<td class="py-space-md px-space-md font-data-sm text-data-sm text-on-surface">
+                Uninterrupted 1024-pt FFT window vibration RMS &lt; 1.4 mm/s
+              </td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-col font-data-sm text-data-sm">
+<span class="text-secondary font-medium">Telemetry blackout &amp; sensor offline</span>
+<span class="text-on-surface-variant font-label-caps text-label-caps">GAP: 14:12:00Z - 14:32:08Z</span>
+</div>
+</td>
+<td class="py-space-md px-gutter text-right">
+<span class="font-label-compact text-label-compact text-on-surface-variant">Sensor Diagnostic Req</span>
+</td>
+</tr>
+<!-- Rule 4: COMPLIANT -->
+<tr class="hover:bg-surface-container-low transition-colors bg-surface-container-lowest">
+<td class="py-space-md px-gutter">
+<div class="flex flex-col">
+<span class="font-data-md text-data-md font-semibold text-tertiary">RULE-OC-0305</span>
+<span class="font-label-compact text-label-compact text-on-surface">COOLANT_FLOW_INTEGRITY</span>
+</div>
+</td>
+<td class="py-space-md px-space-md font-data-sm text-data-sm text-on-surface-variant">FLUID_DELIVERY</td>
+<td class="py-space-md px-space-md">
+<span class="font-label-caps text-label-caps inline-flex items-center gap-1 bg-tertiary-fixed/30 text-tertiary px-space-sm py-0.5 rounded font-semibold">
+<span class="h-1.5 w-1.5 rounded-full bg-tertiary"></span>
+                  COMPLIANT / NOMINAL
+                </span>
+</td>
+<td class="py-space-md px-space-md font-data-sm text-data-sm text-on-surface">
+                Through-spindle coolant pressure 16.0 - 22.0 bar
+              </td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-col font-data-sm text-data-sm">
+<span class="font-semibold text-on-surface">18.2 bar (Variance ±0.3 bar)</span>
+<span class="text-on-surface-variant font-label-caps text-label-caps">REF: TELEM_REC_8841_9810</span>
+</div>
+</td>
+<td class="py-space-md px-gutter text-right">
+<span class="font-label-compact text-label-compact text-tertiary font-medium">None (Pass)</span>
+</td>
+</tr>
+<!-- Rule 5: COMPLIANT -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-space-md px-gutter">
+<div class="flex flex-col">
+<span class="font-data-md text-data-md font-semibold text-tertiary">RULE-OC-0412</span>
+<span class="font-label-compact text-label-compact text-on-surface">SERVO_DRIVE_CURRENT_SYMMETRY</span>
+</div>
+</td>
+<td class="py-space-md px-space-md font-data-sm text-data-sm text-on-surface-variant">DRIVE_AXES</td>
+<td class="py-space-md px-space-md">
+<span class="font-label-caps text-label-caps inline-flex items-center gap-1 bg-tertiary-fixed/30 text-tertiary px-space-sm py-0.5 rounded font-semibold">
+<span class="h-1.5 w-1.5 rounded-full bg-tertiary"></span>
+                  COMPLIANT / NOMINAL
+                </span>
+</td>
+<td class="py-space-md px-space-md font-data-sm text-data-sm text-on-surface">
+                3-Phase current imbalance &lt; 5.0% across all axes
+              </td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-col font-data-sm text-data-sm">
+<span class="font-semibold text-on-surface">3.2% deviation (Nominal)</span>
+<span class="text-on-surface-variant font-label-caps text-label-caps">REF: TELEM_REC_8841_9764</span>
+</div>
+</td>
+<td class="py-space-md px-gutter text-right">
+<span class="font-label-compact text-label-compact text-tertiary font-medium">None (Pass)</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Observed Fault Lifecycle & Timeline -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+<!-- Sequential Timeline (2 cols) -->
+<div class="lg:col-span-2 bg-surface-container-lowest rounded-xl shadow-sm p-gutter flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[20px]">timeline</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Observed Fault Lifecycle Events</h2>
+</div>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Discrete State Receipts</span>
+</div>
+<div class="relative pl-6 flex flex-col gap-space-lg">
+<!-- Flow Vertical Track Line -->
+<div class="absolute left-2.5 top-2 bottom-2 w-0.5 bg-surface-container-high"></div>
+<!-- Event 1: Normal Start -->
+<div class="relative flex items-start gap-space-md">
+<div class="absolute -left-6 mt-1 h-3 w-3 rounded-full bg-tertiary ring-4 ring-surface-container-lowest"></div>
+<div class="flex flex-col bg-surface-container-low p-space-sm rounded w-full">
+<div class="flex items-center justify-between">
+<span class="font-data-md text-data-md font-semibold text-on-surface">Step 4 Initiated: Rough Bore Cyl-3</span>
+<span class="font-data-sm text-data-sm text-on-surface-variant">14:15:02 UTC</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Spindle RPM: 8,400 | Feed Rate: 450 mm/min | Feed Load: 42%</span>
+</div>
+</div>
+<!-- Event 2: Thermal Warning Advisory -->
+<div class="relative flex items-start gap-space-md">
+<div class="absolute -left-6 mt-1 h-3 w-3 rounded-full bg-secondary-fixed-dim ring-4 ring-surface-container-lowest"></div>
+<div class="flex flex-col bg-surface-container-low p-space-sm rounded w-full">
+<div class="flex items-center justify-between">
+<span class="font-data-md text-data-md font-semibold text-on-surface">Warning Advisory: WARN_BEARING_TEMP_HIGH</span>
+<span class="font-data-sm text-data-sm text-on-surface-variant">14:27:10 UTC</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface mt-0.5">
+                Thermal rate +8.4°C/min detected. Sensor VSA-01 Spindle Fore bearing reported 71.0°C exceeding advisory envelope 68.0°C.
+              </span>
+</div>
+</div>
+<!-- Event 3: Fault Hard Stop -->
+<div class="relative flex items-start gap-space-md">
+<div class="absolute -left-6 mt-1 h-3 w-3 rounded-full bg-error ring-4 ring-surface-container-lowest"></div>
+<div class="flex flex-col bg-error-container/40 p-space-sm rounded w-full">
+<div class="flex items-center justify-between">
+<span class="font-data-md text-data-md font-semibold text-error">Fault Start Event: E-STOP_CIRCUIT_TRIP (0x4E1A)</span>
+<span class="font-data-sm text-data-sm text-on-error-container font-semibold">14:28:44 UTC</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface mt-0.5">
+                Interlock relay opens on Tool Changer Light Curtain Loop 2B. Direct machine actuator cutoff. Dynamic spindle regenerative brake engaged.
+              </span>
+</div>
+</div>
+<!-- Event 4: Telemetry Blackout Period -->
+<div class="relative flex items-start gap-space-md">
+<div class="absolute -left-6 mt-1 h-3 w-3 rounded-full bg-outline-variant ring-4 ring-surface-container-lowest"></div>
+<div class="flex flex-col bg-surface-container p-space-sm rounded w-full">
+<div class="flex items-center justify-between">
+<span class="font-data-md text-data-md font-semibold text-on-surface-variant">Telemetry Ingestion Void (42s Blackout)</span>
+<span class="font-data-sm text-data-sm text-on-surface-variant">14:28:44 - 14:29:26 UTC</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+                Secondary I/O slice power drop. Buffer flushed upon auxiliary DC supply stabilization.
+              </span>
+</div>
+</div>
+<!-- Event 5: Current State -->
+<div class="relative flex items-start gap-space-md">
+<div class="absolute -left-6 mt-1 h-3 w-3 rounded-full bg-error animate-ping"></div>
+<div class="absolute -left-6 mt-1 h-3 w-3 rounded-full bg-error ring-4 ring-surface-container-lowest"></div>
+<div class="flex flex-col bg-surface-container-low p-space-sm rounded w-full">
+<div class="flex items-center justify-between">
+<span class="font-data-md text-data-md font-semibold text-error">Current: PENDING_OPERATOR_SIGN_OFF</span>
+<span class="font-data-sm text-data-sm font-semibold text-error">14:32:08 UTC</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface mt-0.5">
+                Hardware interlock remains tripped. Machine parked in de-energized safe mode. Spindle bearing temperature decayed to 58.4°C.
+              </span>
+</div>
+</div>
+</div>
+</div>
+<!-- Physical Asset Subsystem State Map -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm p-gutter flex flex-col justify-between gap-space-md">
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[20px]">precision_manufacturing</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Target Hardware Layout</h2>
+</div>
+<span class="font-label-caps text-label-caps bg-surface-container px-space-xs py-0.5 rounded text-on-surface-variant">CELL C-2</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Observed physical trip zones on CNC-MILL-04 spindle &amp; curtain assembly.</span>
+</div>
+<!-- Structural Asset Blueprint Graphic -->
+<div class="relative bg-surface-container-low rounded-lg p-space-md flex flex-col items-center justify-center min-h-[220px] overflow-hidden">
+<div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#006194 1px, transparent 1px); background-size: 16px 16px;"></div>
+<svg class="w-full h-44 text-on-surface" fill="none" viewbox="0 0 320 180" xmlns="http://www.w3.org/2000/svg">
+<!-- Machine Base Platform -->
+<rect fill="currentColor" fill-opacity="0.12" height="20" rx="2" stroke="currentColor" stroke-width="1.5" width="260" x="30" y="140"></rect>
+<!-- Machine Gantry Columns -->
+<rect fill="currentColor" fill-opacity="0.08" height="100" rx="1" stroke="currentColor" stroke-width="1.5" width="30" x="50" y="40"></rect>
+<rect fill="currentColor" fill-opacity="0.08" height="100" rx="1" stroke="currentColor" stroke-width="1.5" width="30" x="240" y="40"></rect>
+<!-- Cross Beam -->
+<rect fill="currentColor" fill-opacity="0.15" height="25" rx="1" stroke="currentColor" stroke-width="1.5" width="240" x="40" y="30"></rect>
+<!-- Spindle Head Assembly -->
+<rect fill="currentColor" fill-opacity="0.2" height="60" rx="2" stroke="currentColor" stroke-width="1.5" width="50" x="135" y="45"></rect>
+<path d="M150 105 L170 105 L160 125 Z" fill="currentColor" fill-opacity="0.3" stroke="currentColor" stroke-width="1.5"></path>
+<!-- Sensor Highlight: Spindle Fore Bearing (HOT) -->
+<circle class="animate-pulse" cx="160" cy="75" fill="#ba1a1a" fill-opacity="0.25" r="9" stroke="#ba1a1a" stroke-width="2"></circle>
+<circle cx="160" cy="75" fill="#ba1a1a" r="3.5"></circle>
+<!-- Safety Curtain Beam Trip Point -->
+<line stroke="#ba1a1a" stroke-dasharray="4 3" stroke-width="2" x1="85" x2="130" y1="120" y2="120"></line>
+<rect fill="#ba1a1a" height="10" rx="1" width="10" x="80" y="115"></rect>
+<!-- Legend Indicators inside Diagram -->
+<text fill="#ba1a1a" font-family="JetBrains Mono" font-size="9" font-weight="600" x="175" y="72">BEARING VSA-01 [74.2°C]</text>
+<text fill="#ba1a1a" font-family="JetBrains Mono" font-size="9" font-weight="600" x="75" y="108">CURTAIN 2B (TRIPPED)</text>
+</svg>
+<div class="w-full flex items-center justify-between pt-space-xs font-label-caps text-label-caps text-on-surface-variant">
+<span>5-AXIS SPINDLE HEAD: TRIPPED</span>
+<span>COOLANT PRESSURE: 18.2 BAR (OK)</span>
+</div>
+</div>
+<!-- Clearance Signoff Requirements -->
+<div class="bg-surface-container rounded-lg p-space-sm flex flex-col gap-space-xs">
+<span class="font-label-caps text-label-caps font-semibold uppercase text-on-surface">Required Sign-Off Protocol</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+            To clear <code class="font-data-sm text-data-sm text-primary">RULE-OC-0104</code>, operator must physically inspect curtain 2B perimeter, manually reset enclosure switch, and log safety loop check before cycling hydraulic pumps.
+          </p>
+</div>
+</div>
+</div>
+<!-- Cryptographic Proof & Raw JSON Telemetry Trace (Collapsible) -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm p-gutter flex flex-col gap-space-md">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[20px]">enhanced_encryption</span>
+<div class="flex flex-col">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Cryptographic Assessment Proof &amp; Raw Trace</h2>
+<span class="font-data-sm text-data-sm text-on-surface-variant">IMMUTABLE DETERMINISTIC EXECUTION LOG</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm">
+<button class="h-8 px-space-md bg-surface-container hover:bg-surface-container-high transition-colors text-on-surface rounded font-label-compact text-label-compact flex items-center gap-space-xs" id="toggle-json-btn" type="button">
+<span class="material-symbols-outlined text-[16px]">code</span>
+<span id="json-btn-text">View health.v1.trace.json</span>
+</button>
+<button class="h-8 px-space-md bg-surface-container-lowest hover:bg-surface-container text-on-surface rounded font-label-compact text-label-compact flex items-center gap-space-xs shadow-sm" onclick="navigator.clipboard.writeText('e78f99c2b4e883018e69c10f8452ad82312b6ce845d440ad815bc5e648f98aa2'); alert('Assessment SHA-256 Hash copied to clipboard.');" type="button">
+<span class="material-symbols-outlined text-[16px]">content_copy</span>
+<span>Copy Hash</span>
+</button>
+</div>
+</div>
+<!-- Hash and Registry Tags -->
+<div class="flex flex-wrap items-center gap-gutter font-data-sm text-data-sm bg-surface-container-low p-space-sm rounded">
+<div class="flex items-center gap-space-xs min-w-0">
+<span class="font-label-caps text-label-caps uppercase text-on-surface-variant">SHA-256:</span>
+<span class="font-data-sm text-data-sm text-on-surface truncate max-w-xs md:max-w-xl font-semibold">
+            e78f99c2b4e883018e69c10f8452ad82312b6ce845d440ad815bc5e648f98aa2
+          </span>
+</div>
+<div class="flex items-center gap-space-xs ml-auto">
+<span class="material-symbols-outlined text-tertiary text-[16px]">verified</span>
+<span class="font-label-compact text-label-compact text-on-surface-variant">Signed by node: <span class="font-data-sm text-data-sm text-on-surface font-semibold">tw-edge-agent-082</span></span>
+</div>
+</div>
+<!-- Expandable Trace Payload View -->
+<div class="hidden flex-col gap-space-xs pt-space-xs" id="json-trace-drawer">
+<div class="flex items-center justify-between text-on-surface-variant font-label-caps text-label-caps">
+<span>RAW CANONICAL RULE TRACE (PRETTIFIED JSON)</span>
+<span>SCHEMA: https://specs.twinforge.io/contract/health/v1.json</span>
+</div>
+<pre class="bg-on-secondary-fixed text-inverse-on-surface font-data-sm text-data-sm p-gutter rounded overflow-x-auto max-h-72 leading-relaxed"><code>{
+  "contract_version": "health.v1",
+  "method": "observed_condition_rules",
+  "deterministic": true,
+  "predictive_ml_enabled": false,
+  "composite_score_calculated": false,
+  "asset_id": "CNC-MILL-04",
+  "eval_timestamp": "2025-05-18T14:32:08.142Z",
+  "scope_window": {
+    "start": "2025-05-18T12:00:00.000Z",
+    "end": "2025-05-18T14:32:08.000Z"
+  },
+  "ingestion_status": {
+    "evaluation_state": "PARTIAL",
+    "gaps_recorded": 2,
+    "discontinuities": [
+      {
+        "type": "BLACKOUT",
+        "duration_sec": 42,
+        "start": "2025-05-18T14:28:44Z",
+        "end": "2025-05-18T14:29:26Z",
+        "reason": "IO_SLICE_POWER_FAULT"
+      },
+      {
+        "type": "CHANNEL_DROPOUT",
+        "channel": "ifm_vsa001_node04",
+        "last_packet": "2025-05-18T14:12:00Z"
+      }
+    ]
+  },
+  "rule_results": [
+    {
+      "id": "RULE-OC-0101",
+      "status": "VIOLATED",
+      "trigger_eval": "RATE_OF_RISE &gt; 5.0 C/min",
+      "observed_value": 8.4,
+      "evidence_ref": "TELEM_REC_8841_9921"
+    },
+    {
+      "id": "RULE-OC-0104",
+      "status": "VIOLATED",
+      "trigger_eval": "CIRCUIT_OPEN == true",
+      "observed_code": "0x4E1A",
+      "evidence_ref": "EVENT_LOG_8841_0041"
+    },
+    {
+      "id": "RULE-OC-0202",
+      "status": "INCONCLUSIVE",
+      "deficit_reason": "INSUFFICIENT_SAMPLES_IN_BLACKOUT"
+    },
+    {
+      "id": "RULE-OC-0305",
+      "status": "COMPLIANT",
+      "observed_value_bar": 18.2,
+      "evidence_ref": "TELEM_REC_8841_9810"
+    },
+    {
+      "id": "RULE-OC-0412",
+      "status": "COMPLIANT",
+      "observed_imbalance_pct": 3.2,
+      "evidence_ref": "TELEM_REC_8841_9764"
+    }
+  ],
+  "cryptographic_proof": {
+    "hash_algorithm": "SHA-256",
+    "hash": "e78f99c2b4e883018e69c10f8452ad82312b6ce845d440ad815bc5e648f98aa2",
+    "signing_authority": "tw-edge-agent-082.stuttgart.corp.local"
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<script>
+  // Trace viewer toggle interaction
+  const toggleBtn = document.getElementById('toggle-json-btn');
+  const traceDrawer = document.getElementById('json-trace-drawer');
+  const btnText = document.getElementById('json-btn-text');
+
+  if (toggleBtn && traceDrawer && btnText) {
+    toggleBtn.addEventListener('click', () => {
+      const isHidden = traceDrawer.classList.contains('hidden');
+      if (isHidden) {
+        traceDrawer.classList.remove('hidden');
+        traceDrawer.classList.add('flex');
+        btnText.textContent = 'Hide Trace Payload';
+      } else {
+        traceDrawer.classList.add('hidden');
+        traceDrawer.classList.remove('flex');
+        btnText.textContent = 'View health.v1.trace.json';
+      }
+    });
+  }
+
+  // Contract execution button animation
+  const rerunBtn = document.getElementById('rerun-contract-btn');
+  if (rerunBtn) {
+    rerunBtn.addEventListener('click', function() {
+      const icon = this.querySelector('.material-symbols-outlined');
+      if (icon) {
+        icon.classList.add('animate-spin');
+        setTimeout(() => {
+          icon.classList.remove('animate-spin');
+          alert('Deterministic contract re-evaluation complete. Snapshot reaffirmed: 0 rules changed.');
+        }, 800);
+      }
+    });
+  }
+
+  // Row evidence drilldown mock
+  window.inspectEvidence = function(ruleId, refId) {
+    alert('Opening Evidence Inspector:\n\nRule: ' + ruleId + '\nReceipt: ' + refId + '\nIntegrity Hash: Verified');
+  };
+</script></main></div></body></html>

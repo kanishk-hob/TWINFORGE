@@ -1,0 +1,1 @@
+{"compilerOptions":{"allowJs":true,"checkJs":true,"noEmit":true,"target":"ES2023","module":"ESNext","moduleResolution":"Bundler","strict":false,"lib":["ES2023","DOM"],"paths":{"uplot":["./node_modules/uplot"]}},"include":["../app/static/dashboard/contracts.d.ts","../app/static/dashboard/client.js","../app/static/dashboard/data.js","../app/static/dashboard/decision-data.js"]}

@@ -10,6 +10,9 @@ class TwinRegistry:
         self.current_run_id: str | None = None
 
         self.last_sync_at: datetime | None = None
+        self.last_sync_attempt_at: datetime | None = None
+        self.last_sync_error: str | None = None
+        self.consecutive_failures: int = 0
         self.source_connected: bool = False
 
     def reset_for_new_run(self, run_id: str):
@@ -29,12 +32,31 @@ class TwinRegistry:
         self.twins[twin.asset_id] = twin
         return True
 
-    def mark_sync_success(self):
-        self.last_sync_at = datetime.now(timezone.utc)
+    def mark_sync_attempt(self, at: datetime | None = None):
+        self.last_sync_attempt_at = at or datetime.now(timezone.utc)
+
+    def mark_sync_success(self, at: datetime | None = None):
+        self.last_sync_at = at or datetime.now(timezone.utc)
+        self.last_sync_error = None
+        self.consecutive_failures = 0
         self.source_connected = True
 
-    def mark_sync_failure(self):
+    def mark_sync_failure(self, error: str):
+        self.last_sync_error = error
+        self.consecutive_failures += 1
         self.source_connected = False
+
+    def is_source_connected(
+        self,
+        stale_after_seconds: float,
+        now: datetime | None = None,
+    ) -> bool:
+        if not self.source_connected or self.last_sync_at is None:
+            return False
+
+        current_time = now or datetime.now(timezone.utc)
+        age_seconds = (current_time - self.last_sync_at).total_seconds()
+        return age_seconds <= stale_after_seconds
 
     def get(self, asset_id: str):
         return self.twins.get(asset_id)

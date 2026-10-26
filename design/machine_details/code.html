@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"on-surface-variant":"#3f4850","on-primary":"#ffffff","primary":"#006194","on-error-container":"#93000a","secondary-fixed":"#dfe2ed","tertiary-fixed":"#7ffc97","surface-container-high":"#dce9ff","surface":"#f8f9ff","on-background":"#0b1c30","primary-fixed-dim":"#93ccff","error-container":"#ffdad6","background":"#f8f9ff","on-tertiary":"#ffffff","tertiary":"#006b2c","inverse-primary":"#93ccff","inverse-on-surface":"#eaf1ff","on-secondary":"#ffffff","secondary":"#5b5e68","outline":"#707881","surface-bright":"#f8f9ff","on-primary-fixed-variant":"#004b73","on-secondary-fixed-variant":"#434750","tertiary-fixed-dim":"#62df7d","surface-container-low":"#eff4ff","on-error":"#ffffff","error":"#ba1a1a","primary-container":"#007bb9","on-tertiary-fixed":"#002109","surface-dim":"#cbdbf5","surface-container-lowest":"#ffffff","primary-fixed":"#cce5ff","on-tertiary-container":"#f7fff2","surface-container-highest":"#d3e4fe","on-primary-container":"#fdfcff","on-surface":"#0b1c30","on-secondary-fixed":"#181c24","secondary-container":"#dcdfeb","surface-tint":"#006398","on-primary-fixed":"#001d31","on-tertiary-fixed-variant":"#005320","outline-variant":"#bfc7d2","surface-container":"#e5eeff","tertiary-container":"#00873a","surface-variant":"#d3e4fe","secondary-fixed-dim":"#c3c6d1","inverse-surface":"#213145","on-secondary-container":"#5f626c"},borderRadius:{DEFAULT:"0.125rem",lg:"0.25rem",xl:"0.5rem",full:"0.75rem"},spacing:{"space-xs":"0.25rem",gutter:"0.75rem","space-md":"0.5rem","space-xl":"1rem","space-sm":"0.375rem","gutter-compact":"0.5rem","space-lg":"0.75rem","margin-dock":"0.5rem",margin:"1rem"},fontFamily:{"data-md":["JetBrains Mono"],"data-sm":["JetBrains Mono"],"label-compact":["IBM Plex Sans"],"headline-sm":["IBM Plex Sans"],"headline-lg":["IBM Plex Sans"],"label-caps":["JetBrains Mono"],"body-md":["IBM Plex Sans"],"body-sm":["IBM Plex Sans"],"data-lg":["JetBrains Mono"],"headline-xl":["IBM Plex Sans"]},fontSize:{"data-md":["13px",{lineHeight:"16px",letterSpacing:"-0.01em",fontWeight:"500"}],"data-sm":["11px",{lineHeight:"14px",fontWeight:"400"}],"label-compact":["11px",{lineHeight:"14px",fontWeight:"500"}],"headline-sm":["14px",{lineHeight:"20px",letterSpacing:"-0.01em",fontWeight:"600"}],"headline-lg":["18px",{lineHeight:"24px",letterSpacing:"-0.015em",fontWeight:"600"}],"label-caps":["10px",{lineHeight:"12px",letterSpacing:"0.06em",fontWeight:"600"}],"body-md":["13px",{lineHeight:"18px",fontWeight:"400"}],"body-sm":["12px",{lineHeight:"16px",fontWeight:"400"}],"data-lg":["18px",{lineHeight:"22px",letterSpacing:"-0.02em",fontWeight:"600"}],"headline-xl":["24px",{lineHeight:"32px",letterSpacing:"-0.02em",fontWeight:"600"}]}}}};</script></head><body class="bg-surface font-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 h-full w-64 bg-on-secondary-fixed text-inverse-on-surface z-50 flex flex-col justify-between shadow-[0_1px_8px_rgba(0,0,0,0.12)]"><div class="flex flex-col"><div class="h-14 px-gutter flex items-center justify-between bg-inverse-surface"><div class="flex items-center gap-space-sm"><img alt="TWINFORGE Brand Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UfFUrRHIjKRM4G6qmK9YKW7aCXzO7dhGTyhGHragFsmNn70djeDUhuvEVZkUIlsd6UDO2AAGDy38xj0Q4K4HAMe1MMuU6GZL5WFoFcCXhJLxlEfCCh7-8IEpPTLLGErpfwuW4TPCVVOmSxLumIbtxU0anKmU2x1ewTwMJJgqY8nozYxXhnQNBJu5XLHjOtPGBSBREUl58vxBwIIGE_lq00NVQKaIpSBlm1O0wkewqunw"/><span class="font-headline-sm text-headline-sm tracking-tight text-surface-container-lowest">TWINFORGE</span></div><span class="font-label-caps text-label-caps px-space-xs py-0.5 rounded bg-surface-variant text-on-surface font-semibold">v2.4.0-SIM</span></div><div class="px-gutter pt-space-lg pb-space-xs"><span class="font-label-caps text-label-caps uppercase text-outline-variant tracking-wider">Operational Modules</span></div><nav class="flex flex-col gap-space-xs px-space-sm" data-active-classes="bg-primary text-on-primary font-headline-sm"><a class="flex items-center gap-space-md px-space-md py-space-sm rounded text-inverse-on-surface hover:bg-inverse-surface hover:text-surface-container-lowest transition-colors font-body-sm text-body-sm" data-path="overview" href="#overview"><span class="material-symbols-outlined text-[18px]">space_dashboard</span><span>Overview</span></a><a class="flex items-center gap-space-md px-space-md py-space-sm rounded text-inverse-on-surface hover:bg-inverse-surface hover:text-surface-container-lowest transition-colors font-body-sm text-body-sm" data-path="machines" href="#machines"><span class="material-symbols-outlined text-[18px]">precision_manufacturing</span><span>Machines</span></a><a class="flex items-center gap-space-md px-space-md py-space-sm rounded text-inverse-on-surface hover:bg-inverse-surface hover:text-surface-container-lowest transition-colors font-body-sm text-body-sm" data-path="kpi-analytics" href="#kpi-analytics"><span class="material-symbols-outlined text-[18px]">analytics</span><span>KPI Analytics</span></a><a class="flex items-center gap-space-md px-space-md py-space-sm rounded text-inverse-on-surface hover:bg-inverse-surface hover:text-surface-container-lowest transition-colors font-body-sm text-body-sm" data-path="health-assessment" href="#health-assessment"><span class="material-symbols-outlined text-[18px]">vital_signs</span><span>Health Assessment</span></a><a class="flex items-center gap-space-md px-space-md py-space-sm rounded text-inverse-on-surface hover:bg-inverse-surface hover:text-surface-container-lowest transition-colors font-body-sm text-body-sm" data-path="history" href="#history"><span class="material-symbols-outlined text-[18px]">manage_history</span><span>History</span></a></nav></div><div class="p-gutter flex flex-col gap-space-md bg-inverse-surface"><div class="flex flex-col gap-space-xs"><span class="font-label-caps text-label-caps uppercase text-outline-variant">Telemetry Gateway</span><div class="flex items-center justify-between"><span class="font-data-sm text-data-sm text-surface-container-lowest truncate">api-gateway:8443/v1</span><div class="flex items-center gap-space-xs"><span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary-fixed opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-tertiary-container"></span></span><span class="font-label-caps text-label-caps text-tertiary-fixed">14ms</span></div></div></div><div class="flex flex-col gap-space-xs"><span class="font-label-caps text-label-caps uppercase text-outline-variant">Persistence Layer</span><div class="flex items-center justify-between"><span class="font-data-sm text-data-sm text-surface-container-lowest">Timescale/PostgreSQL</span><span class="font-label-caps text-label-caps text-tertiary-fixed-dim bg-on-tertiary-fixed-variant px-space-xs py-0.5 rounded">SYNCED: 100%</span></div></div><div class="pt-space-xs flex items-center justify-between"><div class="flex flex-col"><span class="font-data-sm text-data-sm font-semibold text-surface-container-lowest">eng_j_vance</span><span class="font-label-compact text-label-compact text-outline-variant">L3 Systems Engineer</span></div><span class="material-symbols-outlined text-outline-variant text-[20px]">shield</span></div></div></aside><div class="pl-64"><header class="fixed top-0 left-64 right-0 h-14 bg-surface/90 backdrop-blur-md z-40 shadow-[0_1px_8px_rgba(0,0,0,0.04)] px-gutter flex items-center justify-between"><div class="flex items-center gap-space-md"><img alt="TWINFORGE Brand Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UfFUrRHIjKRM4G6qmK9YKW7aCXzO7dhGTyhGHragFsmNn70djeDUhuvEVZkUIlsd6UDO2AAGDy38xj0Q4K4HAMe1MMuU6GZL5WFoFcCXhJLxlEfCCh7-8IEpPTLLGErpfwuW4TPCVVOmSxLumIbtxU0anKmU2x1ewTwMJJgqY8nozYxXhnQNBJu5XLHjOtPGBSBREUl58vxBwIIGE_lq00NVQKaIpSBlm1O0wkewqunw"/><div class="flex items-center gap-space-sm font-label-compact text-label-compact"><span class="font-label-caps text-label-caps px-space-xs py-0.5 rounded bg-surface-container-high text-primary font-semibold">TELEMETRY CORE</span><span class="text-outline-variant">/</span><span class="font-data-sm text-data-sm text-on-surface font-semibold">STUTTGART_PLANT_04 / LINE_C</span></div></div><div class="flex items-center gap-gutter"><div class="flex items-center gap-space-xs px-space-sm py-1 rounded bg-tertiary-fixed/20 text-tertiary font-data-sm text-data-sm"><span class="inline-block h-2 w-2 rounded-full bg-tertiary"></span><span>REST API: ONLINE / STREAM ACTIVE</span></div><div class="hidden xl:flex items-center gap-space-xs font-data-sm text-data-sm text-on-surface-variant"><span class="material-symbols-outlined text-[16px]">schedule</span><span>LAST SYNC: 2025-05-18 14:32:08 UTC</span></div><div class="flex items-center gap-space-xs"><button class="h-8 px-space-md bg-surface-container-lowest text-on-surface hover:bg-surface-container-high transition-colors rounded font-label-compact text-label-compact flex items-center gap-space-xs shadow-[0_1px_2px_rgba(0,0,0,0.05)]" type="button"><span class="material-symbols-outlined text-[16px]">filter_list</span><span>Filter</span></button><button class="h-8 px-space-md bg-primary text-on-primary hover:bg-primary-container transition-colors rounded font-label-compact text-label-compact flex items-center gap-space-xs" type="button"><span class="material-symbols-outlined text-[16px]">sync</span><span>Synchronize / Refresh</span></button></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></header><main class="relative pt-14 w-full px-gutter bg-surface min-h-screen"><div class="flex flex-col w-full pb-12 gap-space-md">
+<!-- Sub-Header / Breadcrumb & Status Quick-Bar -->
+<div class="flex flex-col lg:flex-row lg:items-center lg:justify-between bg-surface-container-lowest p-space-md rounded shadow-sm gap-space-sm">
+<div class="flex flex-col gap-0.5">
+<div class="flex items-center flex-wrap gap-1.5 font-label-compact text-label-compact text-on-surface-variant">
+<span>Fleet Topology</span>
+<span class="text-outline-variant">/</span>
+<span>Plant 04 - Stuttgart Auto-Forge</span>
+<span class="text-outline-variant">/</span>
+<span>Line C (Powertrain Machining &amp; Assembly)</span>
+<span class="text-outline-variant">/</span>
+<span>Cell C-2</span>
+<span class="text-outline-variant">/</span>
+<span class="font-data-sm text-data-sm font-semibold text-primary">CNC-MILL-04</span>
+</div>
+<div class="flex items-baseline gap-space-md flex-wrap">
+<h1 class="font-headline-xl text-headline-xl text-on-surface tracking-tight">CNC-MILL-04</h1>
+<span class="font-headline-sm text-headline-sm text-on-surface-variant font-normal">5-Axis Heavy Milling Machine (Spindle Machining Center)</span>
+</div>
+</div>
+<!-- Quick Actions -->
+<div class="flex items-center flex-wrap gap-space-xs">
+<button class="h-8 px-space-md bg-error text-on-error hover:bg-on-error-container transition-colors rounded font-label-compact text-label-compact flex items-center gap-space-xs font-semibold shadow-sm" onclick="alert('Interlock Acknowledge signal emitted to PLC bay.')" type="button">
+<span class="material-symbols-outlined text-[16px]">lock_open</span>
+<span>Acknowledge Interlock</span>
+</button>
+<button class="h-8 px-space-md bg-surface-container text-on-surface hover:bg-surface-container-high transition-colors rounded font-label-compact text-label-compact flex items-center gap-space-xs shadow-sm" type="button">
+<span class="material-symbols-outlined text-[16px]">download</span>
+<span>Export CSV</span>
+</button>
+<button class="h-8 px-space-md bg-surface-container text-on-surface hover:bg-surface-container-high transition-colors rounded font-label-compact text-label-compact flex items-center gap-space-xs shadow-sm" type="button">
+<span class="material-symbols-outlined text-[16px]">insights</span>
+<span>KPI Analytics</span>
+</button>
+<button class="h-8 px-space-md bg-primary-fixed text-on-primary-fixed hover:bg-primary-fixed-dim transition-colors rounded font-label-compact text-label-compact flex items-center gap-space-xs font-semibold shadow-sm" type="button">
+<span class="material-symbols-outlined text-[16px]">health_and_safety</span>
+<span>health.v1 Audit</span>
+</button>
+<button class="h-8 px-space-sm bg-surface-container text-on-surface-variant hover:text-on-surface rounded font-label-compact text-label-compact flex items-center justify-center" title="Inspect Raw JSON" type="button">
+<span class="material-symbols-outlined text-[18px]">data_object</span>
+</button>
+</div>
+</div>
+<!-- Operational Context Strip: Hardware Identity & Active Job Strip -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-space-md">
+<!-- Machine Status & ID Panel (4 cols) -->
+<div class="xl:col-span-4 bg-surface-container-lowest p-space-md rounded shadow-sm flex flex-col justify-between gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="relative flex h-2.5 w-2.5">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-error opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-error"></span>
+</span>
+<span class="font-label-caps text-label-caps px-space-xs py-0.5 rounded bg-error-container text-on-error-container font-bold">STATE: FAULT</span>
+<span class="font-label-caps text-label-caps px-space-xs py-0.5 rounded bg-surface-container-high text-primary font-semibold">0x4E1A</span>
+</div>
+<span class="font-data-sm text-data-sm text-on-surface-variant">NODE: sim_node_082</span>
+</div>
+<div class="p-space-sm bg-error-container/40 rounded flex flex-col gap-0.5">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-on-error-container tracking-wider uppercase">Active Primary Interlock</span>
+<span class="font-data-sm text-data-sm font-semibold text-error">CRITICAL (SEV-3)</span>
+</div>
+<div class="font-data-md text-data-md font-bold text-on-error-container">E-STOP_CIRCUIT_TRIP</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Loop 2B broken at tool changer proximity perimeter curtain.</p>
+</div>
+<div class="grid grid-cols-3 gap-space-xs pt-space-xs text-on-surface-variant">
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps uppercase text-outline">Serial Number</span>
+<span class="font-data-sm text-data-sm text-on-surface font-semibold">TF-9942-DE</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps uppercase text-outline">Firmware Build</span>
+<span class="font-data-sm text-data-sm text-on-surface font-semibold">v4.18.2-rt</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps uppercase text-outline">Simulation Pipe</span>
+<span class="font-data-sm text-data-sm text-tertiary font-semibold flex items-center gap-1">
+<span class="h-1.5 w-1.5 rounded-full bg-tertiary"></span>LIVE
+          </span>
+</div>
+</div>
+</div>
+<!-- Active Production Job Context (8 cols) -->
+<div class="xl:col-span-8 bg-surface-container-lowest p-space-md rounded shadow-sm flex flex-col justify-between gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="font-label-caps text-label-caps uppercase text-outline">Current Job Context</span>
+<span class="font-data-sm text-data-sm font-semibold text-primary px-space-xs py-0.5 bg-primary-fixed/30 rounded">JOB-2025-0518-88A</span>
+<span class="font-data-sm text-data-sm text-on-surface-variant">Run: RUN-04-8841</span>
+</div>
+<div class="flex items-center gap-space-xs text-on-surface-variant font-label-compact text-label-compact">
+<span class="material-symbols-outlined text-[16px] text-error">pause_circle</span>
+<span class="text-error font-semibold">EXECUTION INTERRUPTED</span>
+</div>
+</div>
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-baseline justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="font-headline-sm text-headline-sm text-on-surface">Cylinder Block Bore &amp; Face</span>
+<span class="font-body-sm text-body-sm text-outline-variant">|</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Step 4 of 7: <span class="font-semibold text-on-surface">Rough Bore Cylinder 3</span></span>
+</div>
+<span class="font-data-sm text-data-sm font-semibold text-on-surface">57.1% Complete</span>
+</div>
+<!-- Progress track with interrupted marker -->
+<div class="w-full bg-surface-container h-2 rounded overflow-hidden relative">
+<div class="bg-primary h-full w-[57.1%]"></div>
+<div class="absolute left-[57.1%] top-0 bottom-0 w-1 bg-error"></div>
+</div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-space-sm pt-space-xs bg-surface-container-low p-space-sm rounded">
+<div>
+<span class="font-label-caps text-label-caps uppercase text-outline">Target Feed Rate</span>
+<div class="font-data-sm text-data-sm font-semibold text-on-surface">1,250 mm/min</div>
+</div>
+<div>
+<span class="font-label-caps text-label-caps uppercase text-outline">Active Tool Index</span>
+<div class="font-data-sm text-data-sm font-semibold text-on-surface">#12 (Indexable Bore 85mm)</div>
+</div>
+<div>
+<span class="font-label-caps text-label-caps uppercase text-outline">Target Spindle</span>
+<div class="font-data-sm text-data-sm font-semibold text-on-surface">4,200 RPM</div>
+</div>
+<div>
+<span class="font-label-caps text-label-caps uppercase text-outline">Batch Piece Count</span>
+<div class="font-data-sm text-data-sm font-semibold text-on-surface">18 / 32 units</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Telemetry Measurements Ribbon: Explicit Simulator Units -->
+<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-7 gap-space-sm">
+<!-- Metric 1: Spindle Bearing Temp (CRITICAL) -->
+<div class="bg-surface-container-lowest p-space-sm rounded shadow-sm flex flex-col justify-between relative overflow-hidden">
+<div class="absolute top-0 left-0 right-0 h-1 bg-error"></div>
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-label-caps text-label-caps uppercase truncate">Spindle Temp</span>
+<span class="material-symbols-outlined text-error text-[16px]">thermostat</span>
+</div>
+<div class="my-space-xs flex items-baseline justify-between">
+<div class="font-data-lg text-data-lg font-bold text-error">74.2 <span class="font-data-sm text-data-sm text-on-surface-variant font-normal">°C</span></div>
+</div>
+<div class="flex flex-col gap-1">
+<!-- SVG Sparkline: Climb -->
+<svg class="w-full h-5 text-error" preserveaspectratio="none" viewbox="0 0 100 20">
+<polyline fill="none" points="0,17 15,16 30,15 45,13 60,11 75,6 90,3 100,2" stroke="currentColor" stroke-width="2"></polyline>
+</svg>
+<div class="flex items-center justify-between font-label-caps text-label-caps text-error">
+<span>LIMIT &gt; 70.0</span>
+<span>+8.4°C/m</span>
+</div>
+</div>
+</div>
+<!-- Metric 2: Spindle Speed (SAFETY HALT) -->
+<div class="bg-surface-container-lowest p-space-sm rounded shadow-sm flex flex-col justify-between relative overflow-hidden">
+<div class="absolute top-0 left-0 right-0 h-1 bg-error"></div>
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-label-caps text-label-caps uppercase truncate">Spindle Speed</span>
+<span class="material-symbols-outlined text-outline text-[16px]">speed</span>
+</div>
+<div class="my-space-xs flex items-baseline justify-between">
+<div class="font-data-lg text-data-lg font-bold text-error">0 <span class="font-data-sm text-data-sm text-on-surface-variant font-normal">RPM</span></div>
+</div>
+<div class="flex flex-col gap-1">
+<svg class="w-full h-5 text-outline-variant" preserveaspectratio="none" viewbox="0 0 100 20">
+<polyline fill="none" points="0,4 30,4 60,4 75,4 76,19 100,19" stroke="currentColor" stroke-width="2"></polyline>
+</svg>
+<div class="flex items-center justify-between font-label-caps text-label-caps text-error">
+<span>SAFETY HALT</span>
+<span class="text-on-surface-variant">SET: 4,200</span>
+</div>
+</div>
+</div>
+<!-- Metric 3: Axis 3 Vibration (ELEVATED) -->
+<div class="bg-surface-container-lowest p-space-sm rounded shadow-sm flex flex-col justify-between relative overflow-hidden">
+<div class="absolute top-0 left-0 right-0 h-1 bg-surface-container-highest"></div>
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-label-caps text-label-caps uppercase truncate">Axis 3 Vib</span>
+<span class="material-symbols-outlined text-error text-[16px]">vibration</span>
+</div>
+<div class="my-space-xs flex items-baseline justify-between">
+<div class="font-data-lg text-data-lg font-bold text-on-surface">3.42 <span class="font-data-sm text-data-sm text-on-surface-variant font-normal">syn-rel</span></div>
+</div>
+<div class="flex flex-col gap-1">
+<svg class="w-full h-5 text-error" preserveaspectratio="none" viewbox="0 0 100 20">
+<polyline fill="none" points="0,15 20,14 40,16 60,13 74,15 75,3 85,16 100,14" stroke="currentColor" stroke-width="2"></polyline>
+</svg>
+<div class="flex items-center justify-between font-label-caps text-label-caps">
+<span class="text-error font-semibold">HIGH &gt; 1.80</span>
+<span class="text-on-surface-variant">NORM: 0.95</span>
+</div>
+</div>
+</div>
+<!-- Metric 4: Current Draw (Nominal) -->
+<div class="bg-surface-container-lowest p-space-sm rounded shadow-sm flex flex-col justify-between relative overflow-hidden">
+<div class="absolute top-0 left-0 right-0 h-1 bg-tertiary"></div>
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-label-caps text-label-caps uppercase truncate">Current Draw</span>
+<span class="material-symbols-outlined text-outline text-[16px]">electric_meter</span>
+</div>
+<div class="my-space-xs flex items-baseline justify-between">
+<div class="font-data-lg text-data-lg font-bold text-on-surface">48.6 <span class="font-data-sm text-data-sm text-on-surface-variant font-normal">A</span></div>
+</div>
+<div class="flex flex-col gap-1">
+<svg class="w-full h-5 text-primary" preserveaspectratio="none" viewbox="0 0 100 20">
+<polyline fill="none" points="0,10 20,11 40,9 60,10 80,12 100,10" stroke="currentColor" stroke-width="1.5"></polyline>
+</svg>
+<div class="flex items-center justify-between font-label-caps text-label-caps text-on-surface-variant">
+<span>RNG: 35-52 A</span>
+<span class="text-tertiary">NORMAL</span>
+</div>
+</div>
+</div>
+<!-- Metric 5: Active Power (Trip/Idle) -->
+<div class="bg-surface-container-lowest p-space-sm rounded shadow-sm flex flex-col justify-between relative overflow-hidden">
+<div class="absolute top-0 left-0 right-0 h-1 bg-secondary"></div>
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-label-caps text-label-caps uppercase truncate">Active Power</span>
+<span class="material-symbols-outlined text-outline text-[16px]">bolt</span>
+</div>
+<div class="my-space-xs flex items-baseline justify-between">
+<div class="font-data-lg text-data-lg font-bold text-on-surface">14.8 <span class="font-data-sm text-data-sm text-on-surface-variant font-normal">kW</span></div>
+</div>
+<div class="flex flex-col gap-1">
+<svg class="w-full h-5 text-secondary" preserveaspectratio="none" viewbox="0 0 100 20">
+<polyline fill="none" points="0,4 30,5 50,4 74,4 76,14 100,14" stroke="currentColor" stroke-width="1.5"></polyline>
+</svg>
+<div class="flex items-center justify-between font-label-caps text-label-caps text-on-surface-variant">
+<span>HOLD: 14.8 kW</span>
+<span>IDLE BUS</span>
+</div>
+</div>
+</div>
+<!-- Metric 6: Axis 1 & 2 Vib (Nominal) -->
+<div class="bg-surface-container-lowest p-space-sm rounded shadow-sm flex flex-col justify-between relative overflow-hidden">
+<div class="absolute top-0 left-0 right-0 h-1 bg-tertiary"></div>
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-label-caps text-label-caps uppercase truncate">Axis 1 &amp; 2 Vib</span>
+<span class="material-symbols-outlined text-tertiary text-[16px]">check_circle</span>
+</div>
+<div class="my-space-xs flex flex-col">
+<div class="font-data-md text-data-md font-semibold text-on-surface">A1: 0.88 <span class="text-on-surface-variant font-normal text-data-sm">syn-rel</span></div>
+<div class="font-data-md text-data-md font-semibold text-on-surface">A2: 1.02 <span class="text-on-surface-variant font-normal text-data-sm">syn-rel</span></div>
+</div>
+<div class="flex items-center justify-between font-label-caps text-label-caps text-tertiary">
+<span>STABLE</span>
+<span class="text-on-surface-variant">&lt; 1.20</span>
+</div>
+</div>
+<!-- Metric 7: Coolant Pressure -->
+<div class="bg-surface-container-lowest p-space-sm rounded shadow-sm flex flex-col justify-between relative overflow-hidden">
+<div class="absolute top-0 left-0 right-0 h-1 bg-tertiary"></div>
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-label-caps text-label-caps uppercase truncate">Coolant Feed</span>
+<span class="material-symbols-outlined text-outline text-[16px]">valve</span>
+</div>
+<div class="my-space-xs flex items-baseline justify-between">
+<div class="font-data-lg text-data-lg font-bold text-on-surface">18.2 <span class="font-data-sm text-data-sm text-on-surface-variant font-normal">bar</span></div>
+</div>
+<div class="flex flex-col gap-1">
+<svg class="w-full h-5 text-tertiary" preserveaspectratio="none" viewbox="0 0 100 20">
+<polyline fill="none" points="0,8 20,8 40,7 60,8 80,8 100,7" stroke="currentColor" stroke-width="1.5"></polyline>
+</svg>
+<div class="flex items-center justify-between font-label-caps text-label-caps text-on-surface-variant">
+<span>HEAD NOMINAL</span>
+<span class="text-tertiary">18.0 NOM</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Telemetry Integrity & Freshness Banner -->
+<div class="bg-surface-container-low px-space-md py-space-xs rounded flex flex-wrap items-center justify-between gap-space-sm text-on-surface-variant">
+<div class="flex items-center flex-wrap gap-space-lg font-data-sm text-data-sm">
+<div class="flex items-center gap-space-xs">
+<span class="h-2 w-2 rounded-full bg-tertiary"></span>
+<span>STREAM FRESHNESS: <strong class="text-on-surface">0.8s ago</strong> (Interval: 2.0s)</span>
+</div>
+<div>
+<span>SRC TSTAMP: <span class="text-on-surface font-medium">2025-05-18 14:32:07.412 UTC</span></span>
+</div>
+<div>
+<span>RCV TSTAMP: <span class="text-on-surface font-medium">2025-05-18 14:32:07.426 UTC</span> (<span class="text-tertiary font-semibold">14ms latency</span>)</span>
+</div>
+</div>
+<div class="flex items-center gap-space-md font-label-caps text-label-caps">
+<span class="px-space-xs py-0.5 rounded bg-tertiary-fixed/30 text-tertiary font-semibold">BUS INTEGRITY: 7/7 VALID</span>
+<span class="text-on-surface-variant">PARITY DROPS: 0</span>
+<span class="text-tertiary">CRC-32: VERIFIED</span>
+</div>
+</div>
+<!-- Main Technical Workspace: Primary Chart & Diagnostics Panels -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-space-md">
+<!-- Interactive Time-Series Telemetry Analysis (8 Cols) -->
+<div class="xl:col-span-8 bg-surface-container-lowest p-space-md rounded shadow-sm flex flex-col gap-space-md">
+<!-- Chart Controls Header -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm pb-space-xs">
+<div class="flex items-center gap-space-sm">
+<span class="font-headline-sm text-headline-sm text-on-surface">Multi-Channel Telemetry Timeline</span>
+<span class="font-label-caps text-label-caps bg-surface-container px-space-xs py-0.5 rounded text-on-surface-variant font-semibold">15 MIN DURATION</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<!-- Time scale pills -->
+<div class="flex items-center bg-surface-container rounded p-0.5 font-label-compact text-label-compact">
+<button class="px-2 py-0.5 text-on-surface-variant hover:text-on-surface transition-colors">5m</button>
+<button class="px-2 py-0.5 bg-surface-container-lowest text-primary font-semibold rounded shadow-sm">15m</button>
+<button class="px-2 py-0.5 text-on-surface-variant hover:text-on-surface transition-colors">1h</button>
+<button class="px-2 py-0.5 text-on-surface-variant hover:text-on-surface transition-colors">6h</button>
+<button class="px-2 py-0.5 text-on-surface-variant hover:text-on-surface transition-colors">Run</button>
+</div>
+</div>
+</div>
+<!-- Channel Toggle Indicators -->
+<div class="flex flex-wrap items-center gap-space-md bg-surface-container-low px-space-md py-space-xs rounded font-label-compact text-label-compact">
+<span class="text-outline uppercase font-label-caps text-label-caps">Channels:</span>
+<label class="flex items-center gap-1.5 cursor-pointer text-on-surface">
+<input checked="" class="rounded text-primary focus:ring-0 w-3.5 h-3.5" type="checkbox"/>
+<span class="h-2 w-2 rounded-full bg-error"></span>
+<span>Spindle Temp (°C)</span>
+</label>
+<label class="flex items-center gap-1.5 cursor-pointer text-on-surface">
+<input checked="" class="rounded text-primary focus:ring-0 w-3.5 h-3.5" type="checkbox"/>
+<span class="h-2 w-2 rounded-full bg-primary"></span>
+<span>Spindle Speed (RPM)</span>
+</label>
+<label class="flex items-center gap-1.5 cursor-pointer text-on-surface">
+<input checked="" class="rounded text-primary focus:ring-0 w-3.5 h-3.5" type="checkbox"/>
+<span class="h-2 w-2 rounded-full bg-secondary"></span>
+<span>Axis 3 Vib (syn-rel)</span>
+</label>
+<label class="flex items-center gap-1.5 cursor-pointer text-on-surface">
+<input class="rounded text-primary focus:ring-0 w-3.5 h-3.5" type="checkbox"/>
+<span class="h-2 w-2 rounded-full bg-tertiary"></span>
+<span>Current Draw (A)</span>
+</label>
+</div>
+<!-- Detailed SVG Chart Container -->
+<div class="w-full h-80 relative flex flex-col justify-between pt-2 select-none">
+<!-- Y-Axis Multi-labels -->
+<div class="absolute left-0 top-0 bottom-6 flex flex-col justify-between font-data-sm text-data-sm text-on-surface-variant pointer-events-none">
+<span class="text-error font-medium">80°C / 5k RPM</span>
+<span>70°C / 4k RPM</span>
+<span>60°C / 3k RPM</span>
+<span>50°C / 1k RPM</span>
+<span>40°C / 0 RPM</span>
+</div>
+<!-- SVG Visualizer Canvas -->
+<div class="ml-14 mr-2 h-72 relative">
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 700 240">
+<!-- Subtle Gridlines -->
+<line class="text-surface-container" stroke="currentColor" stroke-dasharray="2,2" stroke-width="1" x1="0" x2="700" y1="20" y2="20"></line>
+<line class="text-surface-container" stroke="currentColor" stroke-dasharray="2,2" stroke-width="1" x1="0" x2="700" y1="75" y2="75"></line>
+<line class="text-surface-container" stroke="currentColor" stroke-dasharray="2,2" stroke-width="1" x1="0" x2="700" y1="130" y2="130"></line>
+<line class="text-surface-container" stroke="currentColor" stroke-dasharray="2,2" stroke-width="1" x1="0" x2="700" y1="185" y2="185"></line>
+<line class="text-surface-container-high" stroke="currentColor" stroke-width="1" x1="0" x2="700" y1="239" y2="239"></line>
+<!-- High Temp Threshold Zone (>70°C, corresponding to y=75 and above) -->
+<rect class="text-error/5" fill="currentColor" height="55" width="700" x="0" y="20"></rect>
+<line class="text-error/30" stroke="currentColor" stroke-dasharray="4,4" stroke-width="1" x1="0" x2="700" y1="75" y2="75"></line>
+<text class="text-error font-label-caps" fill="currentColor" font-size="9" x="10" y="70">THERMAL CRITICAL LIMIT (70.0 °C)</text>
+<!-- Vertical Event Marker at Trip (14:28:44 -> ~80% along time scale) -->
+<line class="text-error" stroke="currentColor" stroke-dasharray="3,2" stroke-width="1.5" x1="560" x2="560" y1="0" y2="240"></line>
+<!-- Channel 1: Spindle Speed (RPM) - steady 4,200 (y=66) then drops abruptly to 0 (y=235) at x=560 -->
+<polyline class="text-primary" fill="none" points="0,66 120,66 240,65 360,67 480,66 558,66 560,235 700,235" stroke="currentColor" stroke-width="2"></polyline>
+<!-- Channel 2: Spindle Temperature (°C) - gradual climb from 58°C (y=140) to 74.2°C (y=50) -->
+<polyline class="text-error" fill="none" points="0,140 100,132 200,125 320,110 440,92 500,82 560,54 620,52 700,50" stroke="currentColor" stroke-width="2"></polyline>
+<!-- Channel 3: Axis 3 Vibration - nominal ~1.0 with severe transient spike at x=560 up to 3.42 (y=40) -->
+<polyline class="text-secondary" fill="none" points="0,195 90,192 180,196 270,193 380,195 480,190 550,185 558,180 560,40 564,120 575,175 630,188 700,190" stroke="currentColor" stroke-width="1.5"></polyline>
+<!-- Marker Indicator Point -->
+<circle class="text-error" cx="560" cy="54" fill="currentColor" r="4"></circle>
+<circle class="text-primary" cx="560" cy="235" fill="currentColor" r="4"></circle>
+<circle class="text-secondary" cx="560" cy="40" fill="currentColor" r="4"></circle>
+</svg>
+<!-- Marker Pill Anchor -->
+<div class="absolute left-[76%] -top-2 transform -translate-x-1/2 bg-error text-on-error px-space-sm py-0.5 rounded shadow flex items-center gap-1 font-label-caps text-label-caps font-semibold">
+<span class="material-symbols-outlined text-[12px]">warning</span>
+<span>14:28:44 UTC: E-STOP TRIP OCCURRED</span>
+</div>
+</div>
+<!-- X-Axis Timestamps -->
+<div class="ml-14 mr-2 flex justify-between font-data-sm text-data-sm text-on-surface-variant pt-1 border-t border-surface-container">
+<span>14:17:00</span>
+<span>14:20:00</span>
+<span>14:23:00</span>
+<span>14:26:00</span>
+<span class="text-error font-semibold">14:28:44 [TRIP]</span>
+<span>14:30:00</span>
+<span>14:32:08 UTC</span>
+</div>
+</div>
+<!-- Chart Footnote with Legend Description -->
+<div class="flex items-center justify-between text-on-surface-variant font-body-sm text-body-sm pt-space-xs">
+<div class="flex items-center gap-space-md">
+<span class="flex items-center gap-1"><span class="w-3 h-0.5 bg-error inline-block"></span> Spindle Temp climbed +16.2°C over 11.7m</span>
+<span class="flex items-center gap-1"><span class="w-3 h-0.5 bg-secondary inline-block"></span> Vibration pulse 3.42 syn-rel coincidental with relay release</span>
+</div>
+<span class="font-data-sm text-data-sm text-outline">Sampling Rate: 500ms</span>
+</div>
+</div>
+<!-- Health & Condition Assessment (Card A & Card B Separation) (4 Cols) -->
+<div class="xl:col-span-4 flex flex-col gap-space-md">
+<!-- Card A: Source-Provided Simulator Telemetry Assessment -->
+<div class="bg-surface-container-lowest p-space-md rounded shadow-sm flex flex-col gap-space-sm">
+<div class="flex items-center justify-between border-b border-surface-container pb-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[18px]">memory</span>
+<span class="font-label-caps text-label-caps uppercase text-on-surface font-bold tracking-wider">Card A: Source Heuristics</span>
+</div>
+<span class="font-label-caps text-label-caps px-space-xs py-0.5 rounded bg-surface-container-high text-on-surface-variant">PLC HARDWARE</span>
+</div>
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Anomaly Flag:</span>
+<span class="font-data-sm text-data-sm text-error font-bold flex items-center gap-1">
+<span class="h-2 w-2 rounded-full bg-error"></span> TRUE
+            </span>
+</div>
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Source Severity:</span>
+<span class="font-data-sm text-data-sm text-on-surface font-semibold bg-surface-container px-space-xs py-0.5 rounded">3 - CRITICAL_INTERLOCK</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Trip Channel:</span>
+<span class="font-data-sm text-data-sm text-on-surface">Loop 2B (Tool Changer Barrier)</span>
+</div>
+</div>
+<div class="bg-surface-container-low p-space-sm rounded mt-space-xs">
+<span class="font-label-caps text-label-caps uppercase text-outline block mb-0.5">PLC Simulator Heuristic Note:</span>
+<p class="font-body-sm text-body-sm text-on-surface font-medium italic">
+            “Direct hardwired e-stop trip detected at tool changer proximity barrier.”
+          </p>
+</div>
+</div>
+<!-- Card B: Independent Assessment Findings (TWINFORGE Engine / health.v1 contract) -->
+<div class="bg-surface-container-lowest p-space-md rounded shadow-sm flex flex-col gap-space-sm">
+<div class="flex items-center justify-between border-b border-surface-container pb-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[18px]">neurology</span>
+<span class="font-label-caps text-label-caps uppercase text-on-surface font-bold tracking-wider">Card B: Independent Engine</span>
+</div>
+<span class="font-label-caps text-label-caps px-space-xs py-0.5 rounded bg-primary-fixed text-primary font-bold">health.v1 CONTRACT</span>
+</div>
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Assessment State:</span>
+<span class="font-data-sm text-data-sm px-space-xs py-0.5 rounded bg-surface-container-highest text-on-surface font-semibold">PARTIAL_EVIDENCE</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Evaluation Rule:</span>
+<span class="font-data-sm text-data-sm text-on-surface font-mono">observed_condition_rules</span>
+</div>
+</div>
+<div class="bg-surface-container-low p-space-sm rounded mt-space-xs flex flex-col gap-space-xs">
+<span class="font-label-caps text-label-caps uppercase text-outline block">Independent Engine Finding:</span>
+<p class="font-body-sm text-body-sm text-on-surface leading-snug">
+            “Preceding bearing temperature trend (+8.4°C / 60s) indicates thermal stress prior to trip, but vibration signature during halt was abrupt. Interlock trip confirmed; mechanical seizure unconfirmed.”
+          </p>
+<div class="flex items-start gap-1.5 pt-space-xs border-t border-outline-variant/30 text-on-surface-variant">
+<span class="material-symbols-outlined text-[15px] text-primary mt-0.5 shrink-0">info</span>
+<span class="font-label-compact text-label-compact leading-tight">
+              Notice: Rule-based observed condition only. Not a predictive composite health score.
+            </span>
+</div>
+</div>
+<button class="mt-space-xs w-full h-8 bg-surface-container text-primary hover:bg-surface-container-high rounded font-label-compact text-label-compact flex items-center justify-center gap-space-xs transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">rule</span>
+<span>View Detailed Rule Trace (JSON)</span>
+</button>
+</div>
+<!-- Quick Maintenance / Sensor Diagnostics Dispatch -->
+<div class="bg-surface-container-lowest p-space-md rounded shadow-sm flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps uppercase text-outline">Calibration Status</span>
+<span class="font-data-sm text-data-sm text-on-surface font-semibold">Sensor Cal: Nominal (Cal-ID 892)</span>
+</div>
+<button class="h-7 px-space-sm bg-surface-container text-on-surface hover:bg-surface-container-high rounded font-label-compact text-label-compact transition-colors" type="button">
+          Calibrate
+        </button>
+</div>
+</div>
+</div>
+<!-- Observed State & Fault Event Timeline (Chronological Audit Stream) -->
+<div class="bg-surface-container-lowest p-space-md rounded shadow-sm flex flex-col gap-space-sm">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm">
+<span class="font-headline-sm text-headline-sm text-on-surface">Observed State &amp; Fault Event Timeline</span>
+<span class="font-label-caps text-label-caps bg-surface-container px-space-xs py-0.5 rounded text-on-surface-variant">VERIFIED AUDIT LOG</span>
+</div>
+<div class="flex items-center gap-space-sm font-label-compact text-label-compact text-on-surface-variant">
+<span>Dual Timestamp Mode: Source vs. Receipt Synchronization</span>
+</div>
+</div>
+<!-- High Density Industrial Data Table -->
+<div class="w-full overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low text-outline font-label-caps text-label-caps border-b border-surface-container">
+<th class="py-2 px-space-sm font-semibold">SOURCE TIMESTAMP</th>
+<th class="py-2 px-space-sm font-semibold">RECEIPT (INGEST)</th>
+<th class="py-2 px-space-sm font-semibold">STATE</th>
+<th class="py-2 px-space-sm font-semibold">EVENT / FAULT CODE</th>
+<th class="py-2 px-space-sm font-semibold">TELEMETRY CONTEXT</th>
+<th class="py-2 px-space-sm font-semibold">SOURCE SUBSYSTEM</th>
+<th class="py-2 px-space-sm font-semibold text-right">ACTION DISPATCHED</th>
+</tr>
+</thead>
+<tbody class="font-body-sm text-body-sm divide-y divide-surface-container">
+<!-- Event 1: Critical Trip -->
+<tr class="bg-error-container/20 hover:bg-error-container/30 transition-colors">
+<td class="py-2.5 px-space-sm font-data-sm text-data-sm font-semibold text-on-surface">14:28:44.102 UTC</td>
+<td class="py-2.5 px-space-sm font-data-sm text-data-sm text-on-surface-variant">14:28:44.116 UTC</td>
+<td class="py-2.5 px-space-sm">
+<span class="font-label-caps text-label-caps px-space-xs py-0.5 rounded bg-error text-on-error font-bold inline-block">FAULT</span>
+</td>
+<td class="py-2.5 px-space-sm">
+<span class="font-data-sm text-data-sm font-bold text-error">E-STOP_CIRCUIT_TRIP</span>
+<span class="font-data-sm text-data-sm text-on-surface-variant">(0x4E1A)</span>
+</td>
+<td class="py-2.5 px-space-sm font-data-sm text-data-sm text-on-surface">
+              RPM: 4200-&gt;0 | Temp: 74.2°C | Vib: 3.42
+            </td>
+<td class="py-2.5 px-space-sm font-label-compact text-label-compact text-on-surface">Hardware Safety Relay Bay_02</td>
+<td class="py-2.5 px-space-sm font-label-compact text-label-compact text-right">
+<span class="text-error font-semibold">Automatic Safety Halt</span>
+</td>
+</tr>
+<!-- Event 2: High Temp Warning -->
+<tr class="bg-surface-container-lowest hover:bg-surface-container-low transition-colors">
+<td class="py-2.5 px-space-sm font-data-sm text-data-sm text-on-surface">14:27:10.880 UTC</td>
+<td class="py-2.5 px-space-sm font-data-sm text-data-sm text-on-surface-variant">14:27:10.893 UTC</td>
+<td class="py-2.5 px-space-sm">
+<span class="font-label-caps text-label-caps px-space-xs py-0.5 rounded bg-surface-container-highest text-on-surface font-semibold inline-block">WARNING</span>
+</td>
+<td class="py-2.5 px-space-sm">
+<span class="font-data-sm text-data-sm font-semibold text-on-surface">WARN_BEARING_TEMP_HIGH</span>
+</td>
+<td class="py-2.5 px-space-sm font-data-sm text-data-sm text-on-surface">
+              Temp: 71.0 °C (&gt; 70.0 Limit)
+            </td>
+<td class="py-2.5 px-space-sm font-label-compact text-label-compact text-on-surface-variant">Sensor Node TH-09 (Bearing)</td>
+<td class="py-2.5 px-space-sm font-label-compact text-label-compact text-right text-on-surface-variant">
+              Telemetry Advisory Logged
+            </td>
+</tr>
+<!-- Event 3: Job Sequence 4 Start -->
+<tr class="bg-surface-container-lowest hover:bg-surface-container-low transition-colors">
+<td class="py-2.5 px-space-sm font-data-sm text-data-sm text-on-surface">14:15:02.000 UTC</td>
+<td class="py-2.5 px-space-sm font-data-sm text-data-sm text-on-surface-variant">14:15:02.015 UTC</td>
+<td class="py-2.5 px-space-sm">
+<span class="font-label-caps text-label-caps px-space-xs py-0.5 rounded bg-tertiary-fixed/30 text-tertiary font-semibold inline-block">RUNNING</span>
+</td>
+<td class="py-2.5 px-space-sm">
+<span class="font-data-sm text-data-sm text-on-surface">STEP_START: Step 4 of 7</span>
+</td>
+<td class="py-2.5 px-space-sm font-data-sm text-data-sm text-on-surface-variant">
+              Run: RUN-04-8841 (Bore Cyl 3)
+            </td>
+<td class="py-2.5 px-space-sm font-label-compact text-label-compact text-on-surface-variant">Job Dispatcher Engine</td>
+<td class="py-2.5 px-space-sm font-label-compact text-label-compact text-right text-on-surface-variant">
+              Feed Rate Engaged: 1250mm/m
+            </td>
+</tr>
+<!-- Event 4: Tool Change -->
+<tr class="bg-surface-container-lowest hover:bg-surface-container-low transition-colors">
+<td class="py-2.5 px-space-sm font-data-sm text-data-sm text-on-surface">13:45:18.420 UTC</td>
+<td class="py-2.5 px-space-sm font-data-sm text-data-sm text-on-surface-variant">13:45:18.435 UTC</td>
+<td class="py-2.5 px-space-sm">
+<span class="font-label-caps text-label-caps px-space-xs py-0.5 rounded bg-surface-container text-on-surface-variant font-semibold inline-block">IDLE -&gt; RUN</span>
+</td>
+<td class="py-2.5 px-space-sm">
+<span class="font-data-sm text-data-sm text-on-surface">TOOL_CHANGER_LOCK</span>
+</td>
+<td class="py-2.5 px-space-sm font-data-sm text-data-sm text-on-surface-variant">
+              Tool #12 Index Verified / Locked
+            </td>
+<td class="py-2.5 px-space-sm font-label-compact text-label-compact text-on-surface-variant">ATC Carrousel Sub-PLC</td>
+<td class="py-2.5 px-space-sm font-label-compact text-label-compact text-right text-on-surface-variant">
+              Interlock Cleared
+            </td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Timeline Pagination & Live Buffer Footer -->
+<div class="flex items-center justify-between pt-space-xs text-on-surface-variant font-data-sm text-data-sm">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[16px] text-tertiary">check</span>
+<span>Showing 4 of 1,280 recorded events for current production session</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<button class="h-6 px-2 bg-surface-container text-on-surface hover:bg-surface-container-high rounded text-label-compact" type="button">Older Events</button>
+<button class="h-6 px-2 bg-surface-container text-on-surface hover:bg-surface-container-high rounded text-label-compact" type="button">Jump to Trip</button>
+</div>
+</div>
+</div>
+</div></main></div></body></html>

@@ -1,0 +1,19 @@
+{
+  "name": "twinforge-frontend",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "dev": "node build.mjs --watch",
+    "lint": "node check.mjs",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "node --test ../tests/dashboard/*.test.mjs"
+  },
+  "dependencies": {
+    "uplot": "^1.6.32"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2",
+    "typescript": "^7.0.2"
+  }
+}

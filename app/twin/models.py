@@ -1,5 +1,13 @@
 from typing import Optional, Any
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
+
+
+class OperationalMeasurements(BaseModel):
+    good_count: int | None = None
+    reject_count: int | None = None
+    total_count: int | None = None
+    interval_power_kw: float | None = None
+    interval_seconds: float | None = None
 
 
 class TwinTelemetry(BaseModel):
@@ -25,6 +33,8 @@ class TwinRelationships(BaseModel):
 
 
 class MachineTwin(BaseModel):
+    # Internal canonical data; preserve the existing twin JSON response contract.
+    operations: OperationalMeasurements = Field(default_factory=OperationalMeasurements, exclude=True)
     asset_id: str
     asset_type: str
     factory_id: str
